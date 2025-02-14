@@ -1,10 +1,12 @@
 const theme = {
   colors: {
-    primary: '#2A2A2A',
-    secondary: '#4A90E2',
+    primary: '#000000',
+    secondary: '#00A3FF',
     background: '#FFFFFF',
-    text: '#333333',
-    lightGray: '#F5F5F5',
+    text: '#1A1A1A',
+    lightGray: '#F7F7F7',
+    darkGray: '#333333',
+    overlay: 'rgba(0, 0, 0, 0.7)'
   },
   breakpoints: {
     mobile: '320px',

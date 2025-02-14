@@ -17,7 +17,7 @@ const HeroImage = styled.div`
   background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3');
   background-size: cover;
   background-position: center;
-  filter: brightness(0.8);
+  filter: brightness(0.6);
 `;
 
 const HeroContent = styled.div`
@@ -34,34 +34,42 @@ const HeroContent = styled.div`
 `;
 
 const ContentWrapper = styled(motion.div)`
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
-  padding: 3rem 4rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 800px;
+  padding: 2rem;
 `;
 
 const Title = styled(motion.h1)`
-  font-size: 4.5rem;
-  margin-bottom: 1.5rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-size: 5.5rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  letter-spacing: -1px;
+  line-height: 1.1;
   
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    font-size: 3rem;
+    font-size: 3.5rem;
+  }
+`;
+
+const Tagline = styled(motion.h2)`
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    font-size: 1.5rem;
   }
 `;
 
 const Subtitle = styled(motion.p)`
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   max-width: 600px;
-  margin-bottom: 2rem;
+  margin: 0 auto;
   line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
   
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 `;
 
@@ -71,22 +79,17 @@ const Hero = () => {
       <HeroImage />
       <HeroContent>
         <ContentWrapper
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.6, 0.05, -0.01, 0.9] }}
         >
-          <Title
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+          <Title>
             SISU Ventures
           </Title>
-          <Subtitle
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
+          <Tagline>
+            Time to Build
+          </Tagline>
+          <Subtitle>
             Building a National Portfolio of Premium Real Estate Properties
           </Subtitle>
         </ContentWrapper>

@@ -9,10 +9,10 @@ const Nav = styled(motion.nav)`
   left: 0;
   right: 0;
   z-index: 10;
-  padding: 1rem 2rem;
-  background: ${props => props.scrolled ? 'white' : 'transparent'};
-  transition: background 0.3s ease;
-  box-shadow: ${props => props.scrolled ? '0 2px 10px rgba(0,0,0,0.1)' : 'none'};
+  padding: 1.5rem 2rem;
+  background: ${props => props.scrolled ? 'rgba(255, 255, 255, 0.98)' : 'transparent'};
+  backdrop-filter: ${props => props.scrolled ? 'blur(10px)' : 'none'};
+  transition: all 0.3s ease;
 `;
 
 const NavContainer = styled.div`
@@ -25,24 +25,26 @@ const NavContainer = styled.div`
 
 const Logo = styled.h1`
   color: ${props => props.scrolled ? props.theme.colors.primary : 'white'};
-  font-size: 1.5rem;
-  cursor: pointer;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.5px;
 `;
 
 const NavLinks = styled.div`
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
 `;
 
 const NavLink = styled(Link)`
   color: ${props => props.scrolled ? props.theme.colors.primary : 'white'};
   text-decoration: none;
-  cursor: pointer;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
   
   &:hover {
-    color: ${props => props.theme.colors.secondary};
+    opacity: 1;
   }
 `;
 
@@ -59,12 +61,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <Nav
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      scrolled={scrolled}
-    >
+    <Nav scrolled={scrolled}>
       <NavContainer>
         <Logo scrolled={scrolled}>SISU Ventures</Logo>
         <NavLinks>
