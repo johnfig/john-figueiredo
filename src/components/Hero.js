@@ -98,33 +98,43 @@ const Hero = () => {
     };
 
     const drawTimeline = (time) => {
-      const duration = 30000; // 30 seconds for full animation
+      // Increase duration to ensure all animations complete
+      const duration = 20000; // 20 seconds for full animation cycle
       const progress = (time % duration) / duration;
       
       // Clear canvas with fade effect
       ctx.fillStyle = 'rgba(0, 9, 25, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw animated grid
+      // Keep grid animation at original speed
       drawGrid(time * 0.5);
 
-      // Timeline animations based on progress (slower)
+      // Timeline animations with longer transitions
       if (progress < 0.125) {
-        drawRunnerScene(progress * 4); // Reduced from 8 to 4 for slower animation
+        // 2.5 seconds per scene
+        drawRunnerScene(Math.min(1, progress * 8));
       } else if (progress < 0.25) {
-        drawLimoScene((progress - 0.125) * 4);
+        // Add small pause between scenes
+        const sceneProgress = Math.min(1, (progress - 0.125) * 7);
+        drawLimoScene(sceneProgress);
       } else if (progress < 0.375) {
-        drawCodingScene((progress - 0.25) * 4);
+        const sceneProgress = Math.min(1, (progress - 0.25) * 7);
+        drawCodingScene(sceneProgress);
       } else if (progress < 0.5) {
-        drawSISUGrowthScene((progress - 0.375) * 4);
+        const sceneProgress = Math.min(1, (progress - 0.375) * 7);
+        drawSISUGrowthScene(sceneProgress);
       } else if (progress < 0.625) {
-        drawIPOScene((progress - 0.5) * 4);
+        const sceneProgress = Math.min(1, (progress - 0.5) * 7);
+        drawIPOScene(sceneProgress);
       } else if (progress < 0.75) {
-        drawEdTechScene((progress - 0.625) * 4);
+        const sceneProgress = Math.min(1, (progress - 0.625) * 7);
+        drawEdTechScene(sceneProgress);
       } else if (progress < 0.875) {
-        drawRealEstateScene((progress - 0.75) * 4);
+        const sceneProgress = Math.min(1, (progress - 0.75) * 7);
+        drawRealEstateScene(sceneProgress);
       } else {
-        drawFutureScene((progress - 0.875) * 4);
+        const sceneProgress = Math.min(1, (progress - 0.875) * 7);
+        drawFutureScene(sceneProgress);
       }
     };
 
