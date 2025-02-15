@@ -88,9 +88,9 @@ const investments = [
   },
   {
     id: 3,
-    title: "Plaito",
-    description: "Founded Plaito, an AI-powered edtech platform designed to be a next-generation tutor, unlocking human potential through personalized learning. Achieved 1.2M+ downloads and 200K+ weekly active users, leveraging AI for real-time, adaptive education.",
-    image: "/images/portfolio/plaito.png"
+    title: "Stealth Startup",
+    description: "Stay tuned...",
+    image: "/images/portfolio/stealth-ai.png"
   },
   {
     id: 4,

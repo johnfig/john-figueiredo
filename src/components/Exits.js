@@ -77,6 +77,12 @@ const exits = [
     title: "SISU Extracts",
     description: "Scaled SISU to $100M+ in annual revenue with 3,000% growth over three years, expanding to 150+ employees. Led strategic partnerships, operational scaling, and M&A negotiations, culminating in an IPO as part of a $1B transaction.",
     image: "/images/exits/sisu-extracts.png"
+  },
+  {
+    id: 2,
+    title: "Plaito",
+    description: "Founded Plaito, an AI-powered edtech platform designed to be a next-generation tutor, unlocking human potential through personalized learning. Achieved 1.2M+ downloads and 200K+ weekly active users, leveraging AI for real-time, adaptive education. Was in final negotiations to sell to a multi-billion dollar ed tech company but ultimately decided it was not the right fit.",
+    image: "/images/portfolio/plaito.png"
   }
 ];
 
