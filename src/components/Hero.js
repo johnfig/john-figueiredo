@@ -9,7 +9,7 @@ const HeroSection = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000;
+  background: #000919;
 `;
 
 const Canvas = styled.canvas`
@@ -29,10 +29,9 @@ const GradientOverlay = styled.div`
   height: 100%;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.5) 100%
+    rgba(0, 9, 25, 0.2) 0%,
+    rgba(0, 9, 25, 0.4) 100%
   );
-  backdrop-filter: blur(5px);
 `;
 
 const Title = styled(motion.h1)`
@@ -59,124 +58,9 @@ const Title = styled(motion.h1)`
   }
 `;
 
-class Cell {
-  constructor(x, y, size) {
-    this.x = x;
-    this.y = y;
-    this.size = size;
-    this.alive = Math.random() < 0.3;
-    this.nextState = this.alive;
-    this.energy = this.alive ? 1 : 0;
-    this.color = this.getRandomColor();
-    this.velocity = Math.random() * 0.3 + 0.1; // Slower, more controlled movement
-  }
-
-  getRandomColor() {
-    const colors = [
-      { h: 210, s: 80, l: 55 }, // Vibrant Blue
-      { h: 270, s: 80, l: 55 }, // Vibrant Purple
-      { h: 180, s: 80, l: 55 }, // Vibrant Teal
-      { h: 240, s: 80, l: 55 }, // Vibrant Indigo
-      { h: 200, s: 80, l: 55 }, // Vibrant Light Blue
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  }
-
-  draw(ctx) {
-    if (this.energy > 0.1) {
-      const { h, s, l } = this.color;
-      
-      // Draw sharp border
-      ctx.fillStyle = `hsla(${h}, ${s}%, ${l - 10}%, ${this.energy})`;
-      ctx.fillRect(this.x, this.y, this.size, this.size);
-      
-      // Draw main block slightly smaller
-      ctx.fillStyle = `hsla(${h}, ${s}%, ${l}%, ${this.energy})`;
-      ctx.fillRect(
-        this.x + 1,
-        this.y + 1,
-        this.size - 2,
-        this.size - 2
-      );
-      
-      // Draw highlight
-      ctx.fillStyle = `hsla(${h}, ${s}%, ${l + 30}%, ${this.energy})`;
-      ctx.fillRect(
-        this.x + 3,
-        this.y + 3,
-        this.size - 6,
-        this.size - 6
-      );
-      
-      // Draw inner glow
-      ctx.fillStyle = `hsla(${h}, ${s}%, ${l + 10}%, ${this.energy * 0.7})`;
-      ctx.fillRect(
-        this.x + 6,
-        this.y + 6,
-        this.size - 12,
-        this.size - 12
-      );
-    }
-  }
-
-  update(width) {
-    this.x += this.velocity;
-    
-    if (this.x > width) {
-      this.x = -this.size;
-      this.energy = this.alive ? 1 : 0;
-      this.color = this.getRandomColor();
-    }
-
-    // Sharper transitions
-    if (this.alive && this.energy < 1) {
-      this.energy += 0.1;
-    } else if (!this.alive && this.energy > 0) {
-      this.energy -= 0.1;
-    }
-
-    this.energy = Math.max(0, Math.min(1, this.energy));
-  }
-}
-
-class Grid {
-  constructor(width, height, cellSize) {
-    this.cellSize = cellSize;
-    this.cols = Math.ceil(width / cellSize) + 1; // Add one extra column
-    this.rows = Math.ceil(height / cellSize);
-    this.cells = [];
-
-    for (let y = 0; y < this.rows; y++) {
-      for (let x = 0; x < this.cols; x++) {
-        this.cells.push(new Cell(
-          x * cellSize,
-          y * cellSize,
-          cellSize
-        ));
-      }
-    }
-  }
-
-  draw(ctx) {
-    this.cells.forEach(cell => cell.draw(ctx));
-  }
-
-  update(width) {
-    this.cells.forEach(cell => cell.update(width));
-    
-    // Randomly activate new cells
-    if (Math.random() < 0.03) {
-      const randomCell = this.cells[Math.floor(Math.random() * this.cells.length)];
-      randomCell.alive = true;
-      randomCell.energy = 1;
-      randomCell.color = randomCell.getRandomColor();
-    }
-  }
-}
-
 const Hero = () => {
   const canvasRef = useRef(null);
-  const gridRef = useRef(null);
+  const timelineRef = useRef(0);
   const animationFrameId = useRef(null);
 
   useEffect(() => {
@@ -184,54 +68,252 @@ const Hero = () => {
     const ctx = canvas.getContext('2d');
     let animating = true;
 
-    const resizeCanvas = () => {
-      // Set canvas size with pixel ratio for sharpness
-      const pixelRatio = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * pixelRatio;
-      canvas.height = window.innerHeight * pixelRatio;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      
-      // Scale context for high DPI displays
-      ctx.scale(pixelRatio, pixelRatio);
-      
-      gridRef.current = new Grid(window.innerWidth, window.innerHeight, 20);
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
-    const animate = () => {
-      if (!animating) return;
+    const drawGrid = (time) => {
+      const gridSize = 50;
+      const offset = time % gridSize;
+      
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.lineWidth = 0.5;
 
-      // Clearer background
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      // Draw vertical lines
+      for (let x = offset; x < canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+
+      // Draw horizontal lines
+      for (let y = offset; y < canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+    };
+
+    const drawTimeline = (time) => {
+      const duration = 15000; // 15 seconds for full animation
+      const progress = (time % duration) / duration;
+      
+      // Clear canvas with fade effect
+      ctx.fillStyle = 'rgba(0, 9, 25, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Enable crisp edges
-      ctx.imageSmoothingEnabled = false;
-      
-      gridRef.current.update(window.innerWidth);
-      gridRef.current.draw(ctx);
+      // Draw animated grid
+      drawGrid(time * 0.5);
 
+      // Timeline animations based on progress
+      if (progress < 0.2) {
+        drawScene1(progress * 5); // Track and runner
+      } else if (progress < 0.4) {
+        drawScene2((progress - 0.2) * 5); // SISU beginnings
+      } else if (progress < 0.6) {
+        drawScene3((progress - 0.4) * 5); // Growth phase
+      } else if (progress < 0.8) {
+        drawScene4((progress - 0.6) * 5); // Pivot
+      } else {
+        drawScene5((progress - 0.8) * 5); // Future vision
+      }
+    };
+
+    const drawScene1 = (progress) => {
+      // Track and runner animation
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      
+      ctx.strokeStyle = `rgba(255, 215, 0, ${progress})`;
+      ctx.lineWidth = 2;
+      
+      // Draw track
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 100, 0, progress * Math.PI * 2);
+      ctx.stroke();
+    };
+
+    const drawScene2 = (progress) => {
+      // Napkin sketch animation
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.lineWidth = 1;
+      
+      // Draw blueprint lines
+      for (let i = 0; i < 5; i++) {
+        const length = progress * 200;
+        ctx.beginPath();
+        ctx.moveTo(centerX - length/2, centerY + i * 20);
+        ctx.lineTo(centerX + length/2, centerY + i * 20);
+        ctx.stroke();
+      }
+    };
+
+    const drawScene3 = (progress) => {
+      // Growth phase - Factory and chart
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      
+      // Draw factory blueprint
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.lineWidth = 1;
+      
+      // Factory outline
+      const factoryWidth = 300;
+      const factoryHeight = 200;
+      const x = centerX - factoryWidth/2;
+      const y = centerY - factoryHeight/2;
+      
+      ctx.beginPath();
+      ctx.rect(x, y, factoryWidth * progress, factoryHeight);
+      ctx.stroke();
+      
+      // Stock chart
+      ctx.strokeStyle = `rgba(255, 215, 0, ${progress})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x, y + factoryHeight + 50);
+      
+      for (let i = 0; i <= factoryWidth * progress; i += 10) {
+        ctx.lineTo(
+          x + i,
+          y + factoryHeight + 50 - Math.sin(i * 0.05) * 30 - (i * 0.2)
+        );
+      }
+      ctx.stroke();
+    };
+
+    const drawScene4 = (progress) => {
+      // Pivot phase
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      
+      // Draw forking paths
+      ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
+      ctx.lineWidth = 2;
+      
+      // Main path
+      ctx.beginPath();
+      ctx.moveTo(centerX - 200, centerY);
+      ctx.lineTo(centerX, centerY);
+      ctx.stroke();
+      
+      // Branching paths
+      const angle = progress * Math.PI / 4;
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(
+        centerX + Math.cos(angle) * 200,
+        centerY - Math.sin(angle) * 200
+      );
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(
+        centerX + Math.cos(-angle) * 200,
+        centerY - Math.sin(-angle) * 200
+      );
+      ctx.stroke();
+      
+      // Glowing decision point
+      const gradient = ctx.createRadialGradient(
+        centerX, centerY, 0,
+        centerX, centerY, 20
+      );
+      gradient.addColorStop(0, `rgba(255, 215, 0, ${progress})`);
+      gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
+      ctx.fill();
+    };
+
+    const drawScene5 = (progress) => {
+      // Future vision
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = 200;
+      
+      // Draw glowing world map points
+      const locations = [
+        { x: -0.5, y: -0.3 }, // North America
+        { x: 0.1, y: -0.2 },  // Europe
+        { x: 0.7, y: -0.1 },  // Asia
+        { x: -0.2, y: 0.3 },  // South America
+        { x: 0.4, y: 0.3 },   // Australia
+      ];
+      
+      locations.forEach((loc, i) => {
+        const delay = i * 0.2;
+        const pointProgress = Math.max(0, Math.min(1, (progress - delay) * 3));
+        
+        if (pointProgress > 0) {
+          const x = centerX + loc.x * radius;
+          const y = centerY + loc.y * radius;
+          
+          // Glowing point
+          const gradient = ctx.createRadialGradient(x, y, 0, x, y, 30);
+          gradient.addColorStop(0, `rgba(255, 215, 0, ${pointProgress})`);
+          gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(x, y, 30, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // Connection lines
+          locations.slice(i + 1).forEach(loc2 => {
+            const x2 = centerX + loc2.x * radius;
+            const y2 = centerY + loc2.y * radius;
+            
+            ctx.strokeStyle = `rgba(255, 255, 255, ${pointProgress * 0.3})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+          });
+        }
+      });
+      
+      // Education, Legacy, Longevity text
+      if (progress > 0.7) {
+        const words = ['Education', 'Legacy', 'Longevity'];
+        ctx.font = '24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = `rgba(255, 255, 255, ${(progress - 0.7) * 3})`;
+        words.forEach((word, i) => {
+          ctx.fillText(word, centerX, centerY - 50 + i * 40);
+        });
+      }
+    };
+
+    const animate = (timestamp) => {
+      if (!animating) return;
+      
+      timelineRef.current = timestamp;
+      drawTimeline(timestamp);
+      
       animationFrameId.current = requestAnimationFrame(animate);
     };
 
-    resizeCanvas();
-    animate();
+    handleResize();
+    animate(0);
 
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', handleResize);
 
     return () => {
       animating = false;
       cancelAnimationFrame(animationFrameId.current);
-      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   return (
     <HeroSection>
-      <Canvas 
-        ref={canvasRef}
-        style={{ opacity: 0.9 }} // Increased opacity for sharper appearance
-      />
+      <Canvas ref={canvasRef} />
       <GradientOverlay />
       <Title
         initial={{ opacity: 0, y: 30 }}
