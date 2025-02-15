@@ -402,28 +402,112 @@ const Hero = () => {
     };
 
     const drawRunnerScene = (progress, x, y) => {
-      // Draw track around current position
-      ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
+      ctx.save();
+      ctx.translate(x, y);
+      
+      // Trophy animation phase
+      const trophyOpacity = Math.min(1, progress * 1.5);
+      
+      // Trophy colors
+      ctx.strokeStyle = `rgba(255, 215, 0, ${trophyOpacity})`;
+      ctx.fillStyle = `rgba(255, 215, 0, ${trophyOpacity * 0.3})`;
       ctx.lineWidth = 2;
+      
+      // Draw trophy
+      // Cup body - tapered shape
       ctx.beginPath();
-      ctx.arc(x, y, 50, 0, Math.PI * 2);
+      // Top rim - wider at top
+      ctx.moveTo(-20, -45);
+      ctx.lineTo(20, -45);
+      // Cup sides with elegant taper
+      ctx.quadraticCurveTo(25, -45, 25, -35); // Wider curve at top
+      ctx.quadraticCurveTo(18, -15, 10, 0);   // Taper to narrow bottom
+      ctx.lineTo(-10, 0);  // Narrow base
+      ctx.quadraticCurveTo(-18, -15, -25, -35); // Mirror taper on left side
+      ctx.quadraticCurveTo(-25, -45, -20, -45);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.fill();
+      
+      // Handles - adjusted to match tapered cup
+      // Left handle
+      ctx.beginPath();
+      ctx.moveTo(-25, -35); // Start at cup edge
+      ctx.quadraticCurveTo(-35, -35, -35, -25); // Outer curve
+      ctx.quadraticCurveTo(-35, -15, -25, -15); // Bottom curve
+      ctx.lineTo(-25, -15); // Connect back to cup
       ctx.stroke();
       
-      // Add fracture effect at end of scene
-      if (progress > 0.8) {
-        const fractures = 5;
-        for (let i = 0; i < fractures; i++) {
-          const angle = (i / fractures) * Math.PI * 2;
+      // Right handle
+      ctx.beginPath();
+      ctx.moveTo(25, -35); // Start at cup edge
+      ctx.quadraticCurveTo(35, -35, 35, -25); // Outer curve
+      ctx.quadraticCurveTo(35, -15, 25, -15); // Bottom curve
+      ctx.lineTo(25, -15); // Connect back to cup
+      ctx.stroke();
+      
+      // Base structure
+      // Top platform - narrower to match cup bottom
+      ctx.beginPath();
+      ctx.moveTo(-10, 0);
+      ctx.lineTo(10, 0);
+      ctx.lineTo(8, 5);
+      ctx.lineTo(-8, 5);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.fill();
+      
+      // Middle column - taller and more elegant
+      ctx.beginPath();
+      ctx.moveTo(-5, 5);
+      ctx.lineTo(5, 5);
+      ctx.lineTo(6, 20); // Taller middle section
+      ctx.lineTo(-6, 20);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.fill();
+      
+      // Bottom base - proportional width
+      ctx.beginPath();
+      ctx.moveTo(-20, 20);
+      ctx.lineTo(20, 20);
+      ctx.lineTo(16, 25);
+      ctx.lineTo(-16, 25);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.fill();
+      
+      // Add trophy glow
+      if (progress > 0.5) {
+        const glowOpacity = (progress - 0.5) * 2;
+        const gradient = ctx.createRadialGradient(0, -20, 0, 0, -20, 60);
+        gradient.addColorStop(0, `rgba(255, 215, 0, ${glowOpacity * 0.4})`);
+        gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(-60, -60, 120, 120);
+      }
+      
+      // Add sparkles
+      if (progress > 0.7) {
+        const sparkleOpacity = (progress - 0.7) * 3;
+        for (let i = 0; i < 6; i++) {
+          const angle = progress * 5 + i * Math.PI / 3;
+          const radius = 40 + Math.sin(angle * 3) * 5;
+          const sparkleX = Math.cos(angle) * radius;
+          const sparkleY = Math.sin(angle) * radius - 20;
+          
+          ctx.strokeStyle = `rgba(255, 255, 255, ${sparkleOpacity * 0.8})`;
+          ctx.lineWidth = 1;
           ctx.beginPath();
-          ctx.moveTo(x, y);
-          ctx.lineTo(
-            x + Math.cos(angle) * 75 * (progress - 0.8) * 5,
-            y + Math.sin(angle) * 75 * (progress - 0.8) * 5
-          );
-          ctx.strokeStyle = `rgba(255, 215, 0, ${1 - (progress - 0.8) * 5})`;
+          ctx.moveTo(sparkleX - 4, sparkleY);
+          ctx.lineTo(sparkleX + 4, sparkleY);
+          ctx.moveTo(sparkleX, sparkleY - 4);
+          ctx.lineTo(sparkleX, sparkleY + 4);
           ctx.stroke();
         }
       }
+      
+      ctx.restore();
     };
 
     // Now define stages after all scene functions are defined
