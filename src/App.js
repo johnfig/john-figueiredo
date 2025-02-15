@@ -47,8 +47,8 @@ function App() {
       <Navbar />
       <Hero />
       <About />
-      <Portfolio />
       <Partners />
+      <Portfolio />
       <Exits />
     </ThemeProvider>
   );
