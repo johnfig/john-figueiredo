@@ -98,7 +98,7 @@ const Hero = () => {
     };
 
     const drawTimeline = (time) => {
-      const duration = 30000; // 30 seconds for full animation cycle
+      const duration = 40000; // Increased to 40 seconds for slower scroll
       const progress = Math.min(1, (time % duration) / duration);
       
       // Clear canvas with fade effect
@@ -109,9 +109,9 @@ const Hero = () => {
       drawGrid(time * 0.5);
 
       // Calculate base position for all elements (moving up)
-      const totalHeight = canvas.height * 1.5; // Scroll distance
+      const totalHeight = canvas.height * 2.5; // Increased scroll distance
       const scrollOffset = progress * totalHeight;
-      const baseY = canvas.height + 1300 - scrollOffset; // Start below screen
+      const baseY = canvas.height + 1800 - scrollOffset; // Start further below screen
 
       // Draw timeline path (always visible in center)
       const timelineCenterX = canvas.width / 2;
@@ -123,7 +123,7 @@ const Hero = () => {
       ctx.stroke();
 
       // Define stages in chronological order (earliest first, starting from bottom)
-      const stageSpacing = 250;
+      const stageSpacing = 300; // Increased spacing between stages
       const stages = [
         { text: "2025+: The Next Chapter", scene: drawFutureScene },
         { text: "2023: Real Estate Investing", scene: drawRealEstateScene },
@@ -145,12 +145,12 @@ const Hero = () => {
         if (stageY < canvas.height + 100 && stageY > -100) {
           // Calculate fade-in based on entry from bottom
           const fadeProgress = Math.max(0, Math.min(1,
-            (canvas.height - stageY + 200) / 300
+            (canvas.height - stageY + 300) / 400
           ));
 
           // Calculate stage progress
           const stageProgress = Math.max(0, Math.min(1, 
-            (canvas.height - stageY + 200) / canvas.height
+            (canvas.height - stageY + 300) / canvas.height
           ));
 
           // Draw stage marker
