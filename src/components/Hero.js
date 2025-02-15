@@ -98,7 +98,7 @@ const Hero = () => {
     };
 
     const drawTimeline = (time) => {
-      const duration = 15000; // 15 seconds for full animation
+      const duration = 30000; // 30 seconds for full animation
       const progress = (time % duration) / duration;
       
       // Clear canvas with fade effect
@@ -108,194 +108,281 @@ const Hero = () => {
       // Draw animated grid
       drawGrid(time * 0.5);
 
-      // Timeline animations based on progress
-      if (progress < 0.2) {
-        drawScene1(progress * 5); // Track and runner
-      } else if (progress < 0.4) {
-        drawScene2((progress - 0.2) * 5); // SISU beginnings
-      } else if (progress < 0.6) {
-        drawScene3((progress - 0.4) * 5); // Growth phase
-      } else if (progress < 0.8) {
-        drawScene4((progress - 0.6) * 5); // Pivot
+      // Timeline animations based on progress (slower)
+      if (progress < 0.125) {
+        drawRunnerScene(progress * 4); // Reduced from 8 to 4 for slower animation
+      } else if (progress < 0.25) {
+        drawLimoScene((progress - 0.125) * 4);
+      } else if (progress < 0.375) {
+        drawCodingScene((progress - 0.25) * 4);
+      } else if (progress < 0.5) {
+        drawSISUGrowthScene((progress - 0.375) * 4);
+      } else if (progress < 0.625) {
+        drawIPOScene((progress - 0.5) * 4);
+      } else if (progress < 0.75) {
+        drawEdTechScene((progress - 0.625) * 4);
+      } else if (progress < 0.875) {
+        drawRealEstateScene((progress - 0.75) * 4);
       } else {
-        drawScene5((progress - 0.8) * 5); // Future vision
+        drawFutureScene((progress - 0.875) * 4);
       }
     };
 
-    const drawScene1 = (progress) => {
-      // Track and runner animation
+    const drawRunnerScene = (progress) => {
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      
-      ctx.strokeStyle = `rgba(255, 215, 0, ${progress})`;
-      ctx.lineWidth = 2;
       
       // Draw track
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, 100, 0, progress * Math.PI * 2);
-      ctx.stroke();
-    };
-
-    const drawScene2 = (progress) => {
-      // Napkin sketch animation
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-      ctx.lineWidth = 1;
-      
-      // Draw blueprint lines
-      for (let i = 0; i < 5; i++) {
-        const length = progress * 200;
-        ctx.beginPath();
-        ctx.moveTo(centerX - length/2, centerY + i * 20);
-        ctx.lineTo(centerX + length/2, centerY + i * 20);
-        ctx.stroke();
-      }
-    };
-
-    const drawScene3 = (progress) => {
-      // Growth phase - Factory and chart
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      
-      // Draw factory blueprint
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-      ctx.lineWidth = 1;
-      
-      // Factory outline
-      const factoryWidth = 300;
-      const factoryHeight = 200;
-      const x = centerX - factoryWidth/2;
-      const y = centerY - factoryHeight/2;
-      
-      ctx.beginPath();
-      ctx.rect(x, y, factoryWidth * progress, factoryHeight);
-      ctx.stroke();
-      
-      // Stock chart
-      ctx.strokeStyle = `rgba(255, 215, 0, ${progress})`;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(x, y + factoryHeight + 50);
-      
-      for (let i = 0; i <= factoryWidth * progress; i += 10) {
-        ctx.lineTo(
-          x + i,
-          y + factoryHeight + 50 - Math.sin(i * 0.05) * 30 - (i * 0.2)
-        );
-      }
-      ctx.stroke();
-    };
-
-    const drawScene4 = (progress) => {
-      // Pivot phase
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      
-      // Draw forking paths
       ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
       ctx.lineWidth = 2;
-      
-      // Main path
       ctx.beginPath();
-      ctx.moveTo(centerX - 200, centerY);
-      ctx.lineTo(centerX, centerY);
+      ctx.arc(centerX, centerY, 100, 0, Math.PI * 2);
       ctx.stroke();
-      
-      // Branching paths
-      const angle = progress * Math.PI / 4;
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
-      ctx.lineTo(
-        centerX + Math.cos(angle) * 200,
-        centerY - Math.sin(angle) * 200
-      );
-      ctx.moveTo(centerX, centerY);
-      ctx.lineTo(
-        centerX + Math.cos(-angle) * 200,
-        centerY - Math.sin(-angle) * 200
-      );
-      ctx.stroke();
-      
-      // Glowing decision point
+
+      // Draw runner silhouette
+      const runnerAngle = progress * Math.PI * 4;
+      const runnerX = centerX + Math.cos(runnerAngle) * 100;
+      const runnerY = centerY + Math.sin(runnerAngle) * 100;
+
       const gradient = ctx.createRadialGradient(
-        centerX, centerY, 0,
-        centerX, centerY, 20
+        runnerX, runnerY, 0,
+        runnerX, runnerY, 20
       );
       gradient.addColorStop(0, `rgba(255, 215, 0, ${progress})`);
       gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
+      
       ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
+      ctx.arc(runnerX, runnerY, 10, 0, Math.PI * 2);
       ctx.fill();
+
+      // Track fracture effect at the end
+      if (progress > 0.8) {
+        const fractures = 5;
+        for (let i = 0; i < fractures; i++) {
+          const angle = (i / fractures) * Math.PI * 2;
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY);
+          ctx.lineTo(
+            centerX + Math.cos(angle) * 150 * (progress - 0.8) * 5,
+            centerY + Math.sin(angle) * 150 * (progress - 0.8) * 5
+          );
+          ctx.strokeStyle = `rgba(255, 215, 0, ${1 - (progress - 0.8) * 5})`;
+          ctx.stroke();
+        }
+      }
     };
 
-    const drawScene5 = (progress) => {
-      // Future vision
+    const drawLimoScene = (progress) => {
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      const radius = 200;
       
-      // Draw glowing world map points
-      const locations = [
-        { x: -0.5, y: -0.3 }, // North America
-        { x: 0.1, y: -0.2 },  // Europe
-        { x: 0.7, y: -0.1 },  // Asia
-        { x: -0.2, y: 0.3 },  // South America
-        { x: 0.4, y: 0.3 },   // Australia
-      ];
+      // Draw city street grid
+      const gridSize = 50;
+      const gridWidth = 400;
+      const gridHeight = 200;
       
-      locations.forEach((loc, i) => {
-        const delay = i * 0.2;
-        const pointProgress = Math.max(0, Math.min(1, (progress - delay) * 3));
-        
-        if (pointProgress > 0) {
-          const x = centerX + loc.x * radius;
-          const y = centerY + loc.y * radius;
-          
-          // Glowing point
-          const gradient = ctx.createRadialGradient(x, y, 0, x, y, 30);
-          gradient.addColorStop(0, `rgba(255, 215, 0, ${pointProgress})`);
-          gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
-          ctx.fillStyle = gradient;
-          ctx.beginPath();
-          ctx.arc(x, y, 30, 0, Math.PI * 2);
-          ctx.fill();
-          
-          // Connection lines
-          locations.slice(i + 1).forEach(loc2 => {
-            const x2 = centerX + loc2.x * radius;
-            const y2 = centerY + loc2.y * radius;
-            
-            ctx.strokeStyle = `rgba(255, 255, 255, ${pointProgress * 0.3})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(x2, y2);
-            ctx.stroke();
-          });
-        }
-      });
+      ctx.strokeStyle = `rgba(255, 255, 255, ${progress * 0.3})`;
+      ctx.lineWidth = 1;
       
-      // Education, Legacy, Longevity text
-      if (progress > 0.7) {
-        const words = ['Education', 'Legacy', 'Longevity'];
-        ctx.font = '24px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillStyle = `rgba(255, 255, 255, ${(progress - 0.7) * 3})`;
-        words.forEach((word, i) => {
-          ctx.fillText(word, centerX, centerY - 50 + i * 40);
-        });
+      // Horizontal streets
+      for (let y = -gridHeight/2; y <= gridHeight/2; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(centerX - gridWidth/2, centerY + y);
+        ctx.lineTo(centerX + gridWidth/2, centerY + y);
+        ctx.stroke();
       }
+      
+      // Vertical streets
+      for (let x = -gridWidth/2; x <= gridWidth/2; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(centerX + x, centerY - gridHeight/2);
+        ctx.lineTo(centerX + x, centerY + gridHeight/2);
+        ctx.stroke();
+      }
+
+      // Animated limo
+      const limoX = centerX + Math.cos(progress * Math.PI * 2) * 150;
+      const limoY = centerY + Math.sin(progress * Math.PI * 2) * 50;
+      
+      ctx.strokeStyle = `rgba(255, 215, 0, ${progress})`;
+      ctx.lineWidth = 2;
+      
+      // Limo body
+      ctx.beginPath();
+      ctx.rect(limoX - 40, limoY - 10, 80, 20);
+      ctx.stroke();
+      
+      // Wheels
+      ctx.beginPath();
+      ctx.arc(limoX - 25, limoY + 10, 5, 0, Math.PI * 2);
+      ctx.arc(limoX + 25, limoY + 10, 5, 0, Math.PI * 2);
+      ctx.stroke();
+    };
+
+    const drawCodingScene = (progress) => {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      
+      // Draw computer screen outline
+      const screenWidth = 300;
+      const screenHeight = 200;
+      
+      ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.rect(centerX - screenWidth/2, centerY - screenHeight/2, screenWidth, screenHeight);
+      ctx.stroke();
+
+      // Animated code lines
+      const numLines = 8;
+      const lineSpacing = screenHeight / (numLines + 1);
+      
+      for (let i = 0; i < numLines; i++) {
+        const lineProgress = Math.max(0, Math.min(1, progress * 3 - i * 0.2));
+        const lineWidth = (Math.random() * 0.4 + 0.6) * screenWidth * 0.8;
+        const y = centerY - screenHeight/2 + lineSpacing * (i + 1);
+        
+        ctx.strokeStyle = `rgba(0, 255, 255, ${lineProgress * 0.8})`;
+        ctx.beginPath();
+        ctx.moveTo(centerX - screenWidth/2 + 20, y);
+        ctx.lineTo(centerX - screenWidth/2 + 20 + lineWidth * lineProgress, y);
+        ctx.stroke();
+      }
+
+      // Screen glow effect
+      const gradient = ctx.createRadialGradient(
+        centerX, centerY, 0,
+        centerX, centerY, screenWidth
+      );
+      gradient.addColorStop(0, `rgba(0, 255, 255, ${progress * 0.1})`);
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(centerX - screenWidth, centerY - screenHeight, screenWidth * 2, screenHeight * 2);
+    };
+
+    const drawSISUGrowthScene = (progress) => {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+
+      // Napkin sketch effect
+      if (progress < 0.3) {
+        const sketchProgress = progress / 0.3;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${sketchProgress})`;
+        ctx.lineWidth = 1;
+        
+        // Draw rough sketch lines
+        for (let i = 0; i < 5; i++) {
+          const length = sketchProgress * 200;
+          const y = centerY - 100 + i * 20;
+          ctx.beginPath();
+          ctx.moveTo(centerX - length/2 + Math.random() * 5, y + Math.random() * 5);
+          ctx.lineTo(centerX + length/2 + Math.random() * 5, y + Math.random() * 5);
+          ctx.stroke();
+        }
+      }
+
+      // Factory blueprint and growth
+      if (progress > 0.3) {
+        const buildProgress = (progress - 0.3) / 0.7;
+        const factoryWidth = 400;
+        const factoryHeight = 200;
+        
+        // Factory outline
+        ctx.strokeStyle = `rgba(255, 215, 0, ${buildProgress})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.rect(centerX - factoryWidth/2, centerY - factoryHeight/2, 
+                factoryWidth * buildProgress, factoryHeight);
+        ctx.stroke();
+
+        // Revenue graph
+        if (buildProgress > 0.5) {
+          const graphProgress = (buildProgress - 0.5) * 2;
+          ctx.strokeStyle = 'rgba(0, 255, 255, 0.8)';
+          ctx.beginPath();
+          ctx.moveTo(centerX - factoryWidth/2, centerY + factoryHeight/2 + 50);
+          
+          for (let i = 0; i <= factoryWidth * graphProgress; i += 5) {
+            ctx.lineTo(
+              centerX - factoryWidth/2 + i,
+              centerY + factoryHeight/2 + 50 - Math.pow(i/factoryWidth, 2) * 200
+            );
+          }
+          ctx.stroke();
+        }
+      }
+    };
+
+    const drawIPOScene = (progress) => {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+
+      // Stock chart animation
+      const chartWidth = 400;
+      const chartHeight = 300;
+      
+      // Base grid
+      ctx.strokeStyle = `rgba(255, 255, 255, ${progress * 0.3})`;
+      ctx.lineWidth = 1;
+      
+      // Grid lines
+      for (let i = 0; i <= 5; i++) {
+        const y = centerY - chartHeight/2 + (chartHeight * i/5);
+        ctx.beginPath();
+        ctx.moveTo(centerX - chartWidth/2, y);
+        ctx.lineTo(centerX + chartWidth/2, y);
+        ctx.stroke();
+      }
+
+      // Dramatic rising chart
+      ctx.strokeStyle = `rgba(0, 255, 255, ${progress})`;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(centerX - chartWidth/2, centerY + chartHeight/2);
+      
+      for (let i = 0; i <= chartWidth * progress; i += 2) {
+        const x = centerX - chartWidth/2 + i;
+        const heightMultiplier = Math.min(1, i/(chartWidth * 0.8));
+        const y = centerY + chartHeight/2 - 
+                 (Math.pow(heightMultiplier, 2) * chartHeight * 0.8 + 
+                  Math.sin(i * 0.05) * 20 * heightMultiplier);
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // IPO bell effect at peak
+      if (progress > 0.8) {
+        const bellProgress = (progress - 0.8) * 5;
+        const rings = 3;
+        for (let i = 0; i < rings; i++) {
+          const ringProgress = Math.max(0, Math.min(1, bellProgress - i * 0.2));
+          const radius = ringProgress * 100;
+          
+          ctx.strokeStyle = `rgba(255, 215, 0, ${(1 - ringProgress) * 0.5})`;
+          ctx.beginPath();
+          ctx.arc(centerX, centerY - chartHeight/2, radius, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+    };
+
+    const drawEdTechScene = (progress) => {
+      // Implementation of drawEdTechScene
+    };
+
+    const drawRealEstateScene = (progress) => {
+      // Implementation of drawRealEstateScene
+    };
+
+    const drawFutureScene = (progress) => {
+      // Implementation of drawFutureScene
     };
 
     const animate = (timestamp) => {
       if (!animating) return;
-      
       timelineRef.current = timestamp;
       drawTimeline(timestamp);
-      
       animationFrameId.current = requestAnimationFrame(animate);
     };
 
