@@ -45,8 +45,8 @@ const Title = styled(motion.h1)`
   letter-spacing: -2px;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 255, 255, 0.9) 100%
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.2) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -98,7 +98,7 @@ const Hero = () => {
     };
 
     const drawTimeline = (time) => {
-      const duration = 40000; // Increased to 40 seconds for slower scroll
+      const duration = 40000;
       const progress = Math.min(1, (time % duration) / duration);
       
       // Clear canvas with fade effect
@@ -108,38 +108,48 @@ const Hero = () => {
       // Keep grid animation at original speed
       drawGrid(time * 0.5);
 
+      // Responsive sizing
+      const isMobile = canvas.width < 768;
+      const timelineCenterX = canvas.width / 2;
+      const offsetX = isMobile ? 80 : 150; // Reduced animation offset for mobile
+      const stageSpacing = isMobile ? 250 : 300; // Reduced spacing for mobile
+      const fontSize = isMobile ? 12 : 16; // Smaller font for mobile
+      const sceneScale = isMobile ? 0.7 : 1; // Scale down animations on mobile
+
       // Calculate base position for all elements (moving up)
-      const totalHeight = canvas.height * 2.5; // Increased scroll distance
+      const totalHeight = canvas.height * 2.5;
       const scrollOffset = progress * totalHeight;
-      const baseY = canvas.height + 1800 - scrollOffset; // Start further below screen
+      const baseY = canvas.height + 1800 - scrollOffset;
 
       // Draw timeline path (always visible in center)
-      const timelineCenterX = canvas.width / 2;
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-      ctx.lineWidth = 3;
+      ctx.lineWidth = isMobile ? 2 : 3;
       ctx.beginPath();
       ctx.moveTo(timelineCenterX, 0);
       ctx.lineTo(timelineCenterX, canvas.height);
       ctx.stroke();
 
-      // Define stages in chronological order (earliest first, starting from bottom)
-      const stageSpacing = 300; // Increased spacing between stages
+      // Define stages
       const stages = [
         { text: "2025+: The Next Chapter", scene: drawFutureScene },
         { text: "2023: Real Estate Investing", scene: drawRealEstateScene },
         { text: "2022: EdTech Startup", scene: drawEdTechScene },
-        { text: "2021: Taking SISU Public", scene: drawIPOScene },
-        { text: "2018-2021: Building SISU to $100M", scene: drawSISUGrowthScene },
-        { text: "2012-2016: Taught Myself to Code", scene: drawCodingScene },
+        { text: "2021: SISU IPO", scene: drawIPOScene },
+        { text: "2018-2021: Built SISU to $100M", scene: drawSISUGrowthScene },
+        { text: "2012-2016: Learned to Code", scene: drawCodingScene },
         { text: "2011-2012: Driving a Limo", scene: drawLimoScene },
-        { text: "2000-2010: Running & Discipline", scene: drawRunnerScene }
+        { text: "2000-2010: Running", scene: drawRunnerScene }
       ];
 
       // Draw each stage
       stages.forEach((stage, index) => {
         const stageY = baseY - (index * stageSpacing);
-        const isLeft = index % 2 === 0; // Alternate between left and right
-        const offsetX = isLeft ? -150 : 150; // Distance from center line for animation
+        const isLeft = index % 2 === 0;
+        
+        // Center animations in each half for mobile
+        const sceneX = isMobile ? 
+          (isLeft ? canvas.width * 0.25 : canvas.width * 0.75) : // Center in each half on mobile
+          timelineCenterX + (isLeft ? -offsetX : offsetX); // Desktop positioning
         
         // Only draw stages that are on screen
         if (stageY < canvas.height + 100 && stageY > -100) {
@@ -155,44 +165,61 @@ const Hero = () => {
 
           // Draw stage marker
           ctx.beginPath();
-          ctx.arc(timelineCenterX, stageY, 4, 0, Math.PI * 2);
+          ctx.arc(timelineCenterX, stageY, isMobile ? 3 : 4, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(255, 255, 255, ${0.5 * fadeProgress})`;
           ctx.fill();
 
-          // Draw connection line to scene
+          // Draw connection line to scene - extend 50px from timeline
           ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * fadeProgress})`;
           ctx.beginPath();
           ctx.moveTo(timelineCenterX, stageY);
-          ctx.lineTo(timelineCenterX + offsetX * 0.3, stageY);
+          
+          // Line extends 50px from center
+          const lineEndX = isLeft ? 
+            timelineCenterX - 50 : // Left side: 50px to the left
+            timelineCenterX + 50;  // Right side: 50px to the right
+          
+          ctx.lineTo(lineEndX, stageY);
           ctx.stroke();
 
-          // Draw stage scene with fade
-          stage.scene(stageProgress * fadeProgress, timelineCenterX + offsetX, stageY);
+          // Save context for scene scaling
+          ctx.save();
+          ctx.translate(sceneX, stageY);
+          ctx.scale(sceneScale, sceneScale);
+          ctx.translate(-sceneX, -stageY);
 
-          // Draw stage text with fade - positioned above the scene
-          ctx.font = 'bold 16px Arial';
-          ctx.textAlign = 'center'; // Center text above animation
+          // Draw stage scene with fade
+          stage.scene(stageProgress * fadeProgress, sceneX, stageY);
           
-          // Calculate text position above animation
-          const textY = stageY - 100; // Increased from -70 to -100 to push text up further
+          // Restore context
+          ctx.restore();
+
+          // Draw stage text with fade
+          ctx.font = `bold ${fontSize}px Arial`;
+          ctx.textAlign = 'center';
           
-          // Draw text background for better readability
+          // Calculate text position with half-screen centering for mobile
+          const textY = stageY - (isMobile ? 70 : 100);
+          const textX = isMobile ? 
+            (isLeft ? canvas.width * 0.25 : canvas.width * 0.75) : // Center in each half on mobile
+            sceneX; // Desktop positioning
+          
+          // Draw text background
           const textWidth = ctx.measureText(stage.text).width;
-          const padding = 15;
-          const bgX = timelineCenterX + offsetX - textWidth/2 - padding;
+          const padding = isMobile ? 8 : 15;
+          const bgX = textX - textWidth/2 - padding;
           
-          // Draw text background with increased height for better spacing
-          ctx.fillStyle = `rgba(0, 9, 25, ${0.7 * fadeProgress})`;
+          ctx.fillStyle = `rgba(0, 9, 25, ${0.25 * fadeProgress})`;
           ctx.fillRect(
             bgX,
-            textY - 16 - padding/2,
+            textY - fontSize - padding/2,
             textWidth + padding * 2,
-            24 + padding
+            fontSize * 1.5 + padding
           );
           
           // Draw text
           ctx.fillStyle = `rgba(255, 255, 255, ${stageProgress * fadeProgress})`;
-          ctx.fillText(stage.text, timelineCenterX + offsetX, textY);
+          ctx.fillText(stage.text, textX, textY);
         }
       });
 
