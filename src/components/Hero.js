@@ -45,8 +45,8 @@ const Title = styled(motion.h1)`
   letter-spacing: -2px;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.25) 0%,
-    rgba(255, 255, 255, 0.2) 100%
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -136,7 +136,7 @@ const Hero = () => {
         { text: "2022: EdTech Startup", scene: drawEdTechScene },
         { text: "2021: SISU IPO", scene: drawIPOScene },
         { text: "2018-2021: Built SISU to $100M", scene: drawSISUGrowthScene },
-        { text: "2012-2016: Learned to Code", scene: drawCodingScene },
+        { text: "2012-2018: Learned to Code", scene: drawCodingScene },
         { text: "2011-2012: Driving a Limo", scene: drawLimoScene },
         { text: "2000-2010: Running", scene: drawRunnerScene }
       ];
