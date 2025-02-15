@@ -4,7 +4,10 @@ import { motion } from 'framer-motion';
 
 const Section = styled.section`
   padding: 120px 20px;
-  background: ${props => props.theme.colors.background};
+  background: ${props => props.theme.colors.lightBg};
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+  position: relative;
+  z-index: 2;
 `;
 
 const Container = styled.div`
@@ -86,7 +89,7 @@ const Partners = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          Our Team
+          Partners
         </Title>
         <PartnerCard
           initial={{ opacity: 0, y: 30 }}

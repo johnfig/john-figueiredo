@@ -5,6 +5,9 @@ import { motion } from 'framer-motion';
 const Section = styled.section`
   padding: 120px 20px;
   background: ${props => props.theme.colors.background};
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+  position: relative;
+  z-index: 1;
 `;
 
 const Container = styled.div`

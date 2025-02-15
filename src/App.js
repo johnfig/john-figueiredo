@@ -8,7 +8,6 @@ import About from './components/About';
 import Partners from './components/Partners';
 import Portfolio from './components/Portfolio';
 import Exits from './components/Exits';
-import Contact from './components/Contact';
 
 function App() {
   return (
