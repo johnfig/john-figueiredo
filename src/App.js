@@ -20,7 +20,6 @@ function App() {
       <Partners />
       <Portfolio />
       <Exits />
-      <Contact />
     </ThemeProvider>
   );
 }
