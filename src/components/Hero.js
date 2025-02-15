@@ -461,40 +461,42 @@ const Hero = () => {
       const scrollOffset = progress * totalHeight;
       const baseY = canvas.height + 1800 - scrollOffset;
 
-      // Draw timeline path
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-      ctx.lineWidth = isMobile ? 2 : 3;
-      ctx.beginPath();
-      ctx.moveTo(timelineCenterX, 0);
-      ctx.lineTo(timelineCenterX, canvas.height);
-      ctx.stroke();
-
-      // Draw "My Life Journey" title
+      // Draw "My Life Journey" title first
       const titleY = baseY - (stages.length * stageSpacing) - 100;
       if (titleY < canvas.height + 100 && titleY > -100) {
         const fadeProgress = Math.max(0, Math.min(1,
           (canvas.height - titleY + 300) / 400
         ));
         
-        // Calculate title position on the left side
-        const titleX = timelineCenterX - (isMobile ? 120 : 200); // Adjust these values for desired distance from timeline
+        // Center title above timeline
+        ctx.font = `${isMobile ? 28 : 32}px ${theme.fonts.heading}`;
+        ctx.textAlign = 'center';
         
-        ctx.font = `${isMobile ? 24 : 32}px ${theme.fonts.heading}`;
-        ctx.textAlign = 'right'; // Change to right alignment
-        ctx.fillStyle = `rgba(255, 255, 255, ${0.8 * fadeProgress})`;
-        ctx.fillText('My Life Journey', titleX, titleY);
+        // Add text shadow for better visibility
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
         
-        // Draw decorative lines (now only on the right side of the text)
-        const lineWidth = isMobile ? 40 : 60;
-        ctx.strokeStyle = `rgba(255, 255, 255, ${0.4 * fadeProgress})`;
-        ctx.lineWidth = 2;
+        // Draw text with higher opacity
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.9 * fadeProgress})`;
+        ctx.fillText('My Life Journey', timelineCenterX, titleY);
         
-        // Single line connecting text to timeline
-        ctx.beginPath();
-        ctx.moveTo(titleX + 20, titleY - 15); // Start after text
-        ctx.lineTo(timelineCenterX - 20, titleY - 15); // End before timeline
-        ctx.stroke();
+        // Reset shadow
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
       }
+
+      // Draw timeline path starting below the title
+      const timelineStartY = titleY + 40; // Add gap between title and timeline start
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = isMobile ? 2 : 3;
+      ctx.beginPath();
+      ctx.moveTo(timelineCenterX, timelineStartY);
+      ctx.lineTo(timelineCenterX, canvas.height);
+      ctx.stroke();
 
       // Draw stages
       stages.forEach((stage, index) => {
@@ -550,31 +552,52 @@ const Hero = () => {
           ctx.restore();
 
           // Draw stage text with fade
-          ctx.font = `bold ${fontSize}px Arial`;
           ctx.textAlign = 'center';
-          
+
+          // Split text into date and title
+          const [date, ...titleParts] = stage.text.split(': ');
+          const title = titleParts.join(': ');
+
+          // Calculate text position with proper spacing
+          const dateY = stageY - (isMobile ? 85 : 120);
+          const titleY = stageY - (isMobile ? 65 : 95);
+
+          // Adjust font sizes
+          ctx.font = `${fontSize}px Arial`; // Date font
+          const dateWidth = ctx.measureText(date).width;
+
+          ctx.font = `bold ${fontSize}px Arial`; // Title font
+          const titleWidth = ctx.measureText(title).width;
+
+          // Calculate maximum width for background
+          const maxWidth = Math.max(dateWidth, titleWidth);
+          const padding = isMobile ? 10 : 20;
+          const bgHeight = isMobile ? 45 : 55;
+
           // Calculate text position with half-screen centering for mobile
-          const textY = stageY - (isMobile ? 70 : 100);
           const textX = isMobile ? 
             (isLeft ? canvas.width * 0.25 : canvas.width * 0.75) : // Center in each half on mobile
             sceneX; // Desktop positioning
-          
+
           // Draw text background
-          const textWidth = ctx.measureText(stage.text).width;
-          const padding = isMobile ? 8 : 15;
-          const bgX = textX - textWidth/2 - padding;
-          
+          const bgX = textX - maxWidth/2 - padding;
           ctx.fillStyle = `rgba(0, 9, 25, ${0.25 * fadeProgress})`;
           ctx.fillRect(
             bgX,
-            textY - fontSize - padding/2,
-            textWidth + padding * 2,
-            fontSize * 1.5 + padding
+            dateY - fontSize - padding/2,
+            maxWidth + padding * 2,
+            bgHeight
           );
-          
-          // Draw text
+
+          // Draw date
+          ctx.font = `${fontSize}px Arial`;
+          ctx.fillStyle = `rgba(255, 255, 255, ${0.7 * stageProgress * fadeProgress})`;
+          ctx.fillText(date, textX, dateY);
+
+          // Draw title
+          ctx.font = `bold ${fontSize}px Arial`;
           ctx.fillStyle = `rgba(255, 255, 255, ${stageProgress * fadeProgress})`;
-          ctx.fillText(stage.text, textX, textY);
+          ctx.fillText(title, textX, titleY);
         }
       });
 
