@@ -107,12 +107,12 @@ const Partners = () => {
             <PartnerName>John Figueiredo</PartnerName>
             <PartnerRole>Founder & Managing Partner</PartnerRole>
             <PartnerBio>
-              John Figueiredo leads SISU Ventures with a vision to build a 
-              transformative real estate portfolio across the United States. 
-              With expertise in identifying high-potential properties and 
-              executing value-add strategies, John is focused on delivering 
-              exceptional returns while creating lasting value in the 
-              communities where SISU Ventures invests.
+              John Figueiredo has an entrepreneurial background in finance and technology. 
+              He founded and scaled SISU to 100+ employees and a $100M+ revenue run rate 
+              before its acquisition in 2021 in the largest cannabis SPAC transaction in 
+              Canada. Previously, he led a global team at Teespring, driving a new revenue 
+              channel from $0 to $60M in 9 months. Now, he focuses on real estate investing, 
+              building a portfolio single and multi-family properties in the Midwest.
             </PartnerBio>
           </PartnerInfo>
         </PartnerCard>
