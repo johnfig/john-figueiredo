@@ -78,25 +78,32 @@ const NavLinks = styled.div`
 `;
 
 const MobileMenu = styled(motion.div)`
-  display: flex;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 9, 25, 0.98);
-  backdrop-filter: blur(10px);
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2rem;
   z-index: 98;
   pointer-events: ${props => props.isOpen ? 'auto' : 'none'};
-  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
   
   @media (min-width: ${props => props.theme.breakpoints.tablet}) {
     display: none;
   }
+`;
+
+const MobileMenuBackground = styled(motion.div)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 9, 25, 0.98);
+  backdrop-filter: blur(10px);
 `;
 
 const MobileNavContainer = styled(motion.div)`
@@ -238,27 +245,27 @@ const Navbar = () => {
         </NavContainer>
       </Nav>
 
-      <MobileMenu
-        initial={{ opacity: 0 }}
-        animate={{ 
-          opacity: isOpen ? 1 : 0,
-          transition: {
-            duration: 0.2,
+      <MobileMenu isOpen={isOpen}>
+        <MobileMenuBackground
+          initial={{ opacity: 0 }}
+          animate={{ 
+            opacity: isOpen ? 1 : 0
+          }}
+          transition={{
+            duration: 0.3,
             ease: "easeInOut"
-          }
-        }}
-        isOpen={isOpen}
-      >
+          }}
+        />
         <MobileNavContainer
           initial={{ opacity: 0, y: -20 }}
           animate={{ 
             opacity: isOpen ? 1 : 0,
-            y: isOpen ? 0 : -20,
-            transition: {
-              duration: 0.2,
-              delay: 0.1,
-              ease: "easeOut"
-            }
+            y: isOpen ? 0 : -20
+          }}
+          transition={{
+            duration: 0.3,
+            delay: 0.1,
+            ease: "easeOut"
           }}
         >
           <NavLink 
