@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { useTheme } from 'styled-components';
 
 const HeroSection = styled.section`
   height: 100vh;
@@ -62,6 +63,7 @@ const Hero = () => {
   const canvasRef = useRef(null);
   const timelineRef = useRef(0);
   const animationFrameId = useRef(null);
+  const theme = useTheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -97,6 +99,345 @@ const Hero = () => {
       }
     };
 
+    // Define all scene drawing functions first
+    const drawFutureScene = (progress, x, y) => {
+      // AI network effect
+      const nodes = 6;
+      const radius = 80;
+      
+      // Draw nodes
+      for (let i = 0; i < nodes; i++) {
+        const angle = (i / nodes) * Math.PI * 2;
+        const nodeX = x + Math.cos(angle) * radius;
+        const nodeY = y + Math.sin(angle) * radius;
+        
+        // Node glow
+        const gradient = ctx.createRadialGradient(
+          nodeX, nodeY, 0, nodeX, nodeY, 15
+        );
+        gradient.addColorStop(0, `rgba(0, 255, 255, ${progress * 0.8})`);
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(nodeX, nodeY, 15, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Connect nodes
+        for (let j = i + 1; j < nodes; j++) {
+          const angle2 = (j / nodes) * Math.PI * 2;
+          const node2X = x + Math.cos(angle2) * radius;
+          const node2Y = y + Math.sin(angle2) * radius;
+          
+          // Animated connection
+          const connectionProgress = Math.sin((progress * Math.PI + i * 0.5) % Math.PI);
+          ctx.strokeStyle = `rgba(255, 215, 0, ${connectionProgress * 0.3})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(nodeX, nodeY);
+          ctx.lineTo(node2X, node2Y);
+          ctx.stroke();
+        }
+      }
+
+      // Central AI core
+      const coreGradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+      coreGradient.addColorStop(0, `rgba(255, 255, 255, ${progress * 0.2})`);
+      coreGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      
+      ctx.fillStyle = coreGradient;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    };
+
+    const drawRealEstateScene = (progress, x, y) => {
+      const buildingWidth = 60;
+      const buildingHeight = 100;
+      const numBuildings = 3;
+      const spacing = buildingWidth * 1.5;
+      
+      // Draw multiple buildings
+      for (let i = 0; i < numBuildings; i++) {
+        const buildingX = x + (i - 1) * spacing;
+        const height = buildingHeight * (0.7 + i * 0.3);
+        const buildingProgress = Math.max(0, Math.min(1, progress * 3 - i * 0.3));
+        
+        ctx.strokeStyle = `rgba(255, 215, 0, ${buildingProgress})`;
+        ctx.lineWidth = 2;
+        
+        // Building outline
+        ctx.beginPath();
+        ctx.rect(buildingX - buildingWidth/2, 
+                y + buildingHeight/2 - height * buildingProgress,
+                buildingWidth, height * buildingProgress);
+        ctx.stroke();
+        
+        // Windows
+        if (buildingProgress > 0.5) {
+          const windowProgress = (buildingProgress - 0.5) * 2;
+          ctx.strokeStyle = `rgba(0, 255, 255, ${windowProgress * 0.8})`;
+          for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 3; col++) {
+              ctx.beginPath();
+              ctx.rect(buildingX - buildingWidth/3 + col * buildingWidth/3,
+                      y + buildingHeight/2 - height * 0.8 + row * height/6,
+                      buildingWidth/5, height/8);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+    };
+
+    const drawEdTechScene = (progress, x, y) => {
+      // Cracking effect
+      const size = 100;
+      ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
+      ctx.lineWidth = 2;
+
+      // Draw EdTech symbol
+      ctx.beginPath();
+      ctx.moveTo(x - size/2, y - size/2);
+      ctx.lineTo(x + size/2, y + size/2);
+      ctx.moveTo(x + size/2, y - size/2);
+      ctx.lineTo(x - size/2, y + size/2);
+      ctx.stroke();
+
+      // Fracture effect
+      if (progress > 0.5) {
+        const fractures = 6;
+        const fractureProg = (progress - 0.5) * 2;
+        for (let i = 0; i < fractures; i++) {
+          const angle = (i / fractures) * Math.PI * 2;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(
+            x + Math.cos(angle) * size * fractureProg,
+            y + Math.sin(angle) * size * fractureProg
+          );
+          ctx.strokeStyle = `rgba(255, 0, 0, ${(1 - fractureProg) * 0.5})`;
+          ctx.stroke();
+        }
+      }
+    };
+
+    const drawIPOScene = (progress, x, y) => {
+      // Stock chart animation
+      const chartWidth = 200;
+      const chartHeight = 150;
+      
+      // Base grid
+      ctx.strokeStyle = `rgba(255, 255, 255, ${progress * 0.3})`;
+      ctx.lineWidth = 1;
+      
+      // Grid lines
+      for (let i = 0; i <= 5; i++) {
+        const gridY = y - chartHeight/2 + (chartHeight * i/5);
+        ctx.beginPath();
+        ctx.moveTo(x - chartWidth/2, gridY);
+        ctx.lineTo(x + chartWidth/2, gridY);
+        ctx.stroke();
+      }
+
+      // Dramatic rising chart
+      ctx.strokeStyle = `rgba(0, 255, 255, ${progress})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x - chartWidth/2, y + chartHeight/2);
+      
+      for (let i = 0; i <= chartWidth * progress; i += 2) {
+        const chartX = x - chartWidth/2 + i;
+        const heightMultiplier = Math.min(1, i/(chartWidth * 0.8));
+        const chartY = y + chartHeight/2 - 
+                 (Math.pow(heightMultiplier, 2) * chartHeight * 0.8 + 
+                  Math.sin(i * 0.05) * 10 * heightMultiplier);
+        ctx.lineTo(chartX, chartY);
+      }
+      ctx.stroke();
+
+      // IPO bell effect at peak
+      if (progress > 0.8) {
+        const bellProgress = (progress - 0.8) * 5;
+        const rings = 3;
+        for (let i = 0; i < rings; i++) {
+          const ringProgress = Math.max(0, Math.min(1, bellProgress - i * 0.2));
+          const radius = ringProgress * 50;
+          
+          ctx.strokeStyle = `rgba(255, 215, 0, ${(1 - ringProgress) * 0.5})`;
+          ctx.beginPath();
+          ctx.arc(x, y - chartHeight/2, radius, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+    };
+
+    const drawSISUGrowthScene = (progress, x, y) => {
+      // Napkin sketch effect
+      if (progress < 0.3) {
+        const sketchProgress = progress / 0.3;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${sketchProgress})`;
+        ctx.lineWidth = 1;
+        
+        // Draw rough sketch lines
+        for (let i = 0; i < 5; i++) {
+          const length = sketchProgress * 100;
+          const lineY = y - 50 + i * 10;
+          ctx.beginPath();
+          ctx.moveTo(x - length/2 + Math.random() * 5, lineY + Math.random() * 5);
+          ctx.lineTo(x + length/2 + Math.random() * 5, lineY + Math.random() * 5);
+          ctx.stroke();
+        }
+      }
+
+      // Factory blueprint and growth
+      if (progress > 0.3) {
+        const buildProgress = (progress - 0.3) / 0.7;
+        const factoryWidth = 200;
+        const factoryHeight = 100;
+        
+        // Factory outline
+        ctx.strokeStyle = `rgba(255, 215, 0, ${buildProgress})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.rect(x - factoryWidth/2, y - factoryHeight/2, 
+                factoryWidth * buildProgress, factoryHeight);
+        ctx.stroke();
+
+        // Revenue graph
+        if (buildProgress > 0.5) {
+          const graphProgress = (buildProgress - 0.5) * 2;
+          ctx.strokeStyle = 'rgba(0, 255, 255, 0.8)';
+          ctx.beginPath();
+          ctx.moveTo(x - factoryWidth/2, y + factoryHeight/2 + 25);
+          
+          for (let i = 0; i <= factoryWidth * graphProgress; i += 5) {
+            ctx.lineTo(
+              x - factoryWidth/2 + i,
+              y + factoryHeight/2 + 25 - Math.pow(i/factoryWidth, 2) * 100
+            );
+          }
+          ctx.stroke();
+        }
+      }
+    };
+
+    const drawCodingScene = (progress, x, y) => {
+      // Draw computer screen outline
+      const screenWidth = 150;
+      const screenHeight = 100;
+      
+      ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.rect(x - screenWidth/2, y - screenHeight/2, screenWidth, screenHeight);
+      ctx.stroke();
+
+      // Animated code lines
+      const numLines = 6;
+      const lineSpacing = screenHeight / (numLines + 1);
+      
+      for (let i = 0; i < numLines; i++) {
+        const lineProgress = Math.max(0, Math.min(1, progress * 3 - i * 0.2));
+        const lineWidth = (Math.random() * 0.4 + 0.6) * screenWidth * 0.8;
+        const lineY = y - screenHeight/2 + lineSpacing * (i + 1);
+        
+        ctx.strokeStyle = `rgba(0, 255, 255, ${lineProgress * 0.8})`;
+        ctx.beginPath();
+        ctx.moveTo(x - screenWidth/2 + 10, lineY);
+        ctx.lineTo(x - screenWidth/2 + 10 + lineWidth * lineProgress, lineY);
+        ctx.stroke();
+      }
+
+      // Screen glow effect
+      const gradient = ctx.createRadialGradient(x, y, 0, x, y, screenWidth/2);
+      gradient.addColorStop(0, `rgba(0, 255, 255, ${progress * 0.1})`);
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(x - screenWidth, y - screenHeight, screenWidth * 2, screenHeight * 2);
+    };
+
+    const drawLimoScene = (progress, x, y) => {
+      // Draw city street grid around current position
+      const gridSize = 30;
+      const gridWidth = 200;
+      const gridHeight = 100;
+      
+      ctx.strokeStyle = `rgba(255, 255, 255, ${progress * 0.3})`;
+      ctx.lineWidth = 1;
+      
+      // Horizontal streets
+      for (let offsetY = -gridHeight/2; offsetY <= gridHeight/2; offsetY += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x - gridWidth/2, y + offsetY);
+        ctx.lineTo(x + gridWidth/2, y + offsetY);
+        ctx.stroke();
+      }
+      
+      // Vertical streets
+      for (let offsetX = -gridWidth/2; offsetX <= gridWidth/2; offsetX += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x + offsetX, y - gridHeight/2);
+        ctx.lineTo(x + offsetX, y + gridHeight/2);
+        ctx.stroke();
+      }
+
+      // Animated limo
+      const limoX = x + Math.cos(progress * Math.PI * 2) * 50;
+      const limoY = y + Math.sin(progress * Math.PI * 2) * 20;
+      
+      ctx.strokeStyle = `rgba(255, 215, 0, ${progress})`;
+      ctx.lineWidth = 2;
+      
+      // Limo body
+      ctx.beginPath();
+      ctx.rect(limoX - 20, limoY - 5, 40, 10);
+      ctx.stroke();
+      
+      // Wheels
+      ctx.beginPath();
+      ctx.arc(limoX - 12, limoY + 5, 3, 0, Math.PI * 2);
+      ctx.arc(limoX + 12, limoY + 5, 3, 0, Math.PI * 2);
+      ctx.stroke();
+    };
+
+    const drawRunnerScene = (progress, x, y) => {
+      // Draw track around current position
+      ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(x, y, 50, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // Add fracture effect at end of scene
+      if (progress > 0.8) {
+        const fractures = 5;
+        for (let i = 0; i < fractures; i++) {
+          const angle = (i / fractures) * Math.PI * 2;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(
+            x + Math.cos(angle) * 75 * (progress - 0.8) * 5,
+            y + Math.sin(angle) * 75 * (progress - 0.8) * 5
+          );
+          ctx.strokeStyle = `rgba(255, 215, 0, ${1 - (progress - 0.8) * 5})`;
+          ctx.stroke();
+        }
+      }
+    };
+
+    // Now define stages after all scene functions are defined
+    const stages = [
+      { text: "2025+: The Next Chapter", scene: drawFutureScene },
+      { text: "2023: Real Estate Investing", scene: drawRealEstateScene },
+      { text: "2022: EdTech Startup", scene: drawEdTechScene },
+      { text: "2021: SISU IPO", scene: drawIPOScene },
+      { text: "2018-2021: Built SISU to $100M", scene: drawSISUGrowthScene },
+      { text: "2012-2018: Learned to Code", scene: drawCodingScene },
+      { text: "2011-2012: Driving a Limo", scene: drawLimoScene },
+      { text: "2000-2010: Nationally Ranked Runner", scene: drawRunnerScene }
+    ];
+
     const drawTimeline = (time) => {
       const duration = 40000;
       const progress = Math.min(1, (time % duration) / duration);
@@ -105,23 +446,22 @@ const Hero = () => {
       ctx.fillStyle = 'rgba(0, 9, 25, 0.15)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Keep grid animation at original speed
       drawGrid(time * 0.5);
 
       // Responsive sizing
       const isMobile = canvas.width < 768;
       const timelineCenterX = canvas.width / 2;
-      const offsetX = isMobile ? 80 : 150; // Reduced animation offset for mobile
-      const stageSpacing = isMobile ? 250 : 300; // Reduced spacing for mobile
-      const fontSize = isMobile ? 12 : 16; // Smaller font for mobile
-      const sceneScale = isMobile ? 0.7 : 1; // Scale down animations on mobile
+      const offsetX = isMobile ? 80 : 150;
+      const stageSpacing = isMobile ? 250 : 300;
+      const fontSize = isMobile ? 12 : 16;
+      const sceneScale = isMobile ? 0.7 : 1;
 
-      // Calculate base position for all elements (moving up)
+      // Calculate base position for all elements
       const totalHeight = canvas.height * 2.5;
       const scrollOffset = progress * totalHeight;
       const baseY = canvas.height + 1800 - scrollOffset;
 
-      // Draw timeline path (always visible in center)
+      // Draw timeline path
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
       ctx.lineWidth = isMobile ? 2 : 3;
       ctx.beginPath();
@@ -129,19 +469,34 @@ const Hero = () => {
       ctx.lineTo(timelineCenterX, canvas.height);
       ctx.stroke();
 
-      // Define stages
-      const stages = [
-        { text: "2025+: The Next Chapter", scene: drawFutureScene },
-        { text: "2023: Real Estate Investing", scene: drawRealEstateScene },
-        { text: "2022: EdTech Startup", scene: drawEdTechScene },
-        { text: "2021: SISU IPO", scene: drawIPOScene },
-        { text: "2018-2021: Built SISU to $100M", scene: drawSISUGrowthScene },
-        { text: "2012-2018: Learned to Code", scene: drawCodingScene },
-        { text: "2011-2012: Driving a Limo", scene: drawLimoScene },
-        { text: "2000-2010: Running", scene: drawRunnerScene }
-      ];
+      // Draw "My Life Journey" title
+      const titleY = baseY - (stages.length * stageSpacing) - 100;
+      if (titleY < canvas.height + 100 && titleY > -100) {
+        const fadeProgress = Math.max(0, Math.min(1,
+          (canvas.height - titleY + 300) / 400
+        ));
+        
+        // Calculate title position on the left side
+        const titleX = timelineCenterX - (isMobile ? 120 : 200); // Adjust these values for desired distance from timeline
+        
+        ctx.font = `${isMobile ? 24 : 32}px ${theme.fonts.heading}`;
+        ctx.textAlign = 'right'; // Change to right alignment
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.8 * fadeProgress})`;
+        ctx.fillText('My Life Journey', titleX, titleY);
+        
+        // Draw decorative lines (now only on the right side of the text)
+        const lineWidth = isMobile ? 40 : 60;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.4 * fadeProgress})`;
+        ctx.lineWidth = 2;
+        
+        // Single line connecting text to timeline
+        ctx.beginPath();
+        ctx.moveTo(titleX + 20, titleY - 15); // Start after text
+        ctx.lineTo(timelineCenterX - 20, titleY - 15); // End before timeline
+        ctx.stroke();
+      }
 
-      // Draw each stage
+      // Draw stages
       stages.forEach((stage, index) => {
         const stageY = baseY - (index * stageSpacing);
         const isLeft = index % 2 === 0;
@@ -252,332 +607,6 @@ const Hero = () => {
       ctx.fill();
     };
 
-    const drawRunnerScene = (progress, x, y) => {
-      // Draw track around current position
-      ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(x, y, 50, 0, Math.PI * 2);
-      ctx.stroke();
-      
-      // Add fracture effect at end of scene
-      if (progress > 0.8) {
-        const fractures = 5;
-        for (let i = 0; i < fractures; i++) {
-          const angle = (i / fractures) * Math.PI * 2;
-          ctx.beginPath();
-          ctx.moveTo(x, y);
-          ctx.lineTo(
-            x + Math.cos(angle) * 75 * (progress - 0.8) * 5,
-            y + Math.sin(angle) * 75 * (progress - 0.8) * 5
-          );
-          ctx.strokeStyle = `rgba(255, 215, 0, ${1 - (progress - 0.8) * 5})`;
-          ctx.stroke();
-        }
-      }
-    };
-
-    const drawLimoScene = (progress, x, y) => {
-      // Draw city street grid around current position
-      const gridSize = 30;
-      const gridWidth = 200;
-      const gridHeight = 100;
-      
-      ctx.strokeStyle = `rgba(255, 255, 255, ${progress * 0.3})`;
-      ctx.lineWidth = 1;
-      
-      // Horizontal streets
-      for (let offsetY = -gridHeight/2; offsetY <= gridHeight/2; offsetY += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x - gridWidth/2, y + offsetY);
-        ctx.lineTo(x + gridWidth/2, y + offsetY);
-        ctx.stroke();
-      }
-      
-      // Vertical streets
-      for (let offsetX = -gridWidth/2; offsetX <= gridWidth/2; offsetX += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x + offsetX, y - gridHeight/2);
-        ctx.lineTo(x + offsetX, y + gridHeight/2);
-        ctx.stroke();
-      }
-
-      // Animated limo
-      const limoX = x + Math.cos(progress * Math.PI * 2) * 50;
-      const limoY = y + Math.sin(progress * Math.PI * 2) * 20;
-      
-      ctx.strokeStyle = `rgba(255, 215, 0, ${progress})`;
-      ctx.lineWidth = 2;
-      
-      // Limo body
-      ctx.beginPath();
-      ctx.rect(limoX - 20, limoY - 5, 40, 10);
-      ctx.stroke();
-      
-      // Wheels
-      ctx.beginPath();
-      ctx.arc(limoX - 12, limoY + 5, 3, 0, Math.PI * 2);
-      ctx.arc(limoX + 12, limoY + 5, 3, 0, Math.PI * 2);
-      ctx.stroke();
-    };
-
-    const drawCodingScene = (progress, x, y) => {
-      // Draw computer screen outline
-      const screenWidth = 150;
-      const screenHeight = 100;
-      
-      ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.rect(x - screenWidth/2, y - screenHeight/2, screenWidth, screenHeight);
-      ctx.stroke();
-
-      // Animated code lines
-      const numLines = 6;
-      const lineSpacing = screenHeight / (numLines + 1);
-      
-      for (let i = 0; i < numLines; i++) {
-        const lineProgress = Math.max(0, Math.min(1, progress * 3 - i * 0.2));
-        const lineWidth = (Math.random() * 0.4 + 0.6) * screenWidth * 0.8;
-        const lineY = y - screenHeight/2 + lineSpacing * (i + 1);
-        
-        ctx.strokeStyle = `rgba(0, 255, 255, ${lineProgress * 0.8})`;
-        ctx.beginPath();
-        ctx.moveTo(x - screenWidth/2 + 10, lineY);
-        ctx.lineTo(x - screenWidth/2 + 10 + lineWidth * lineProgress, lineY);
-        ctx.stroke();
-      }
-
-      // Screen glow effect
-      const gradient = ctx.createRadialGradient(x, y, 0, x, y, screenWidth/2);
-      gradient.addColorStop(0, `rgba(0, 255, 255, ${progress * 0.1})`);
-      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(x - screenWidth, y - screenHeight, screenWidth * 2, screenHeight * 2);
-    };
-
-    const drawSISUGrowthScene = (progress, x, y) => {
-      // Napkin sketch effect
-      if (progress < 0.3) {
-        const sketchProgress = progress / 0.3;
-        ctx.strokeStyle = `rgba(255, 255, 255, ${sketchProgress})`;
-        ctx.lineWidth = 1;
-        
-        // Draw rough sketch lines
-        for (let i = 0; i < 5; i++) {
-          const length = sketchProgress * 100;
-          const lineY = y - 50 + i * 10;
-          ctx.beginPath();
-          ctx.moveTo(x - length/2 + Math.random() * 5, lineY + Math.random() * 5);
-          ctx.lineTo(x + length/2 + Math.random() * 5, lineY + Math.random() * 5);
-          ctx.stroke();
-        }
-      }
-
-      // Factory blueprint and growth
-      if (progress > 0.3) {
-        const buildProgress = (progress - 0.3) / 0.7;
-        const factoryWidth = 200;
-        const factoryHeight = 100;
-        
-        // Factory outline
-        ctx.strokeStyle = `rgba(255, 215, 0, ${buildProgress})`;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.rect(x - factoryWidth/2, y - factoryHeight/2, 
-                factoryWidth * buildProgress, factoryHeight);
-        ctx.stroke();
-
-        // Revenue graph
-        if (buildProgress > 0.5) {
-          const graphProgress = (buildProgress - 0.5) * 2;
-          ctx.strokeStyle = 'rgba(0, 255, 255, 0.8)';
-          ctx.beginPath();
-          ctx.moveTo(x - factoryWidth/2, y + factoryHeight/2 + 25);
-          
-          for (let i = 0; i <= factoryWidth * graphProgress; i += 5) {
-            ctx.lineTo(
-              x - factoryWidth/2 + i,
-              y + factoryHeight/2 + 25 - Math.pow(i/factoryWidth, 2) * 100
-            );
-          }
-          ctx.stroke();
-        }
-      }
-    };
-
-    const drawIPOScene = (progress, x, y) => {
-      // Stock chart animation
-      const chartWidth = 200;
-      const chartHeight = 150;
-      
-      // Base grid
-      ctx.strokeStyle = `rgba(255, 255, 255, ${progress * 0.3})`;
-      ctx.lineWidth = 1;
-      
-      // Grid lines
-      for (let i = 0; i <= 5; i++) {
-        const gridY = y - chartHeight/2 + (chartHeight * i/5);
-        ctx.beginPath();
-        ctx.moveTo(x - chartWidth/2, gridY);
-        ctx.lineTo(x + chartWidth/2, gridY);
-        ctx.stroke();
-      }
-
-      // Dramatic rising chart
-      ctx.strokeStyle = `rgba(0, 255, 255, ${progress})`;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(x - chartWidth/2, y + chartHeight/2);
-      
-      for (let i = 0; i <= chartWidth * progress; i += 2) {
-        const chartX = x - chartWidth/2 + i;
-        const heightMultiplier = Math.min(1, i/(chartWidth * 0.8));
-        const chartY = y + chartHeight/2 - 
-                 (Math.pow(heightMultiplier, 2) * chartHeight * 0.8 + 
-                  Math.sin(i * 0.05) * 10 * heightMultiplier);
-        ctx.lineTo(chartX, chartY);
-      }
-      ctx.stroke();
-
-      // IPO bell effect at peak
-      if (progress > 0.8) {
-        const bellProgress = (progress - 0.8) * 5;
-        const rings = 3;
-        for (let i = 0; i < rings; i++) {
-          const ringProgress = Math.max(0, Math.min(1, bellProgress - i * 0.2));
-          const radius = ringProgress * 50;
-          
-          ctx.strokeStyle = `rgba(255, 215, 0, ${(1 - ringProgress) * 0.5})`;
-          ctx.beginPath();
-          ctx.arc(x, y - chartHeight/2, radius, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-      }
-    };
-
-    const drawEdTechScene = (progress, x, y) => {
-      // Cracking effect
-      const size = 100;
-      ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
-      ctx.lineWidth = 2;
-
-      // Draw EdTech symbol
-      ctx.beginPath();
-      ctx.moveTo(x - size/2, y - size/2);
-      ctx.lineTo(x + size/2, y + size/2);
-      ctx.moveTo(x + size/2, y - size/2);
-      ctx.lineTo(x - size/2, y + size/2);
-      ctx.stroke();
-
-      // Fracture effect
-      if (progress > 0.5) {
-        const fractures = 6;
-        const fractureProg = (progress - 0.5) * 2;
-        for (let i = 0; i < fractures; i++) {
-          const angle = (i / fractures) * Math.PI * 2;
-          ctx.beginPath();
-          ctx.moveTo(x, y);
-          ctx.lineTo(
-            x + Math.cos(angle) * size * fractureProg,
-            y + Math.sin(angle) * size * fractureProg
-          );
-          ctx.strokeStyle = `rgba(255, 0, 0, ${(1 - fractureProg) * 0.5})`;
-          ctx.stroke();
-        }
-      }
-    };
-
-    const drawRealEstateScene = (progress, x, y) => {
-      const buildingWidth = 60;
-      const buildingHeight = 100;
-      const numBuildings = 3;
-      const spacing = buildingWidth * 1.5;
-      
-      // Draw multiple buildings
-      for (let i = 0; i < numBuildings; i++) {
-        const buildingX = x + (i - 1) * spacing;
-        const height = buildingHeight * (0.7 + i * 0.3);
-        const buildingProgress = Math.max(0, Math.min(1, progress * 3 - i * 0.3));
-        
-        ctx.strokeStyle = `rgba(255, 215, 0, ${buildingProgress})`;
-        ctx.lineWidth = 2;
-        
-        // Building outline
-        ctx.beginPath();
-        ctx.rect(buildingX - buildingWidth/2, 
-                y + buildingHeight/2 - height * buildingProgress,
-                buildingWidth, height * buildingProgress);
-        ctx.stroke();
-        
-        // Windows
-        if (buildingProgress > 0.5) {
-          const windowProgress = (buildingProgress - 0.5) * 2;
-          ctx.strokeStyle = `rgba(0, 255, 255, ${windowProgress * 0.8})`;
-          for (let row = 0; row < 5; row++) {
-            for (let col = 0; col < 3; col++) {
-              ctx.beginPath();
-              ctx.rect(buildingX - buildingWidth/3 + col * buildingWidth/3,
-                      y + buildingHeight/2 - height * 0.8 + row * height/6,
-                      buildingWidth/5, height/8);
-              ctx.stroke();
-            }
-          }
-        }
-      }
-    };
-
-    const drawFutureScene = (progress, x, y) => {
-      // AI network effect
-      const nodes = 6;
-      const radius = 80;
-      
-      // Draw nodes
-      for (let i = 0; i < nodes; i++) {
-        const angle = (i / nodes) * Math.PI * 2;
-        const nodeX = x + Math.cos(angle) * radius;
-        const nodeY = y + Math.sin(angle) * radius;
-        
-        // Node glow
-        const gradient = ctx.createRadialGradient(
-          nodeX, nodeY, 0, nodeX, nodeY, 15
-        );
-        gradient.addColorStop(0, `rgba(0, 255, 255, ${progress * 0.8})`);
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(nodeX, nodeY, 15, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Connect nodes
-        for (let j = i + 1; j < nodes; j++) {
-          const angle2 = (j / nodes) * Math.PI * 2;
-          const node2X = x + Math.cos(angle2) * radius;
-          const node2Y = y + Math.sin(angle2) * radius;
-          
-          // Animated connection
-          const connectionProgress = Math.sin((progress * Math.PI + i * 0.5) % Math.PI);
-          ctx.strokeStyle = `rgba(255, 215, 0, ${connectionProgress * 0.3})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(nodeX, nodeY);
-          ctx.lineTo(node2X, node2Y);
-          ctx.stroke();
-        }
-      }
-
-      // Central AI core
-      const coreGradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-      coreGradient.addColorStop(0, `rgba(255, 255, 255, ${progress * 0.2})`);
-      coreGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      
-      ctx.fillStyle = coreGradient;
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, Math.PI * 2);
-      ctx.fill();
-    };
-
     const animate = (timestamp) => {
       if (!animating) return;
       timelineRef.current = timestamp;
@@ -595,7 +624,7 @@ const Hero = () => {
       cancelAnimationFrame(animationFrameId.current);
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [theme]);
 
   return (
     <HeroSection id="hero">
