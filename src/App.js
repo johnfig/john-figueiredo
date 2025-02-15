@@ -20,13 +20,9 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    position: fixed;
-    position: relative;
     width: 100%;
-    height: 100%;
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior: none;
-    touch-action: pan-y pinch-zoom;
+    overscroll-behavior-y: contain;
   }
 
   #root {
@@ -36,9 +32,11 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    overscroll-behavior-y: none;
-    overscroll-behavior-x: none;
-    overflow-x: hidden !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.5;
+    color: ${props => props.theme.colors.text};
+    background: ${props => props.theme.colors.background};
   }
 `;
 
@@ -49,8 +47,8 @@ function App() {
       <Navbar />
       <Hero />
       <About />
-      <Partners />
       <Portfolio />
+      <Partners />
       <Exits />
     </ThemeProvider>
   );
