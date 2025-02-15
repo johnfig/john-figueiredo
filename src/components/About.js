@@ -97,14 +97,14 @@ const thesisPoints = [
     id: 2,
     title: "Forced Appreciation",
     description: "Implementing strategic improvements and operational efficiencies to drive value creation.",
-    icon: "⚡",
+    icon: "📈",
     color: "linear-gradient(135deg, #ee0979, #ff6a00)"
   },
   {
     id: 3,
     title: "High Cash Flow",
     description: "Focusing on assets that generate strong, consistent cash flows to ensure sustainable returns.",
-    icon: "💫",
+    icon: "💰",
     color: "linear-gradient(135deg, #11998e, #38ef7d)"
   },
   {

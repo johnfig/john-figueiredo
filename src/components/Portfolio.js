@@ -76,27 +76,27 @@ const CardDescription = styled.p`
 const investments = [
   {
     id: 1,
-    title: "SISU RE Fund",
-    description: "A diversified portfolio of multi-family and single-family properties across high-growth markets in the United States.",
-    image: "/images/real-estate-fund.jpg"
+    title: "Workforce Housing",
+    description: "A diversified portfolio of workforce housing multi-family and single-family properties across the Midwest.",
+    image: "/images/portfolio/sisu-re-fund.png"
   },
   {
     id: 2,
-    title: "ODC Fund",
-    description: "Strategic investments in emerging opportunities within the digital currency and blockchain ecosystem.",
-    image: "/images/odc-fund.jpg"
+    title: "Value Equities",
+    description: "Carefully selected portfolio of undervalued public equities with strong fundamentals and growth potential.",
+    image: "/images/portfolio/value-equities.png"
   },
   {
     id: 3,
     title: "Plaito",
     description: "Revolutionary AI-powered platform transforming the landscape of digital content creation and distribution.",
-    image: "/images/plaito.jpg"
+    image: "/images/portfolio/plaito.png"
   },
   {
     id: 4,
-    title: "Value Equities",
-    description: "Carefully selected portfolio of undervalued public equities with strong fundamentals and growth potential.",
-    image: "/images/value-equities.jpg"
+    title: "Mobile Home Parks",
+    description: "Strategic investments in emerging opportunities within the digital currency and blockchain ecosystem.",
+    image: "/images/portfolio/odc-fund.png"
   }
 ];
 

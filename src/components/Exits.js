@@ -76,7 +76,7 @@ const exits = [
     id: 1,
     title: "SISU Extracts",
     description: "Successfully exited cannabis extraction technology company through strategic acquisition, delivering exceptional returns to investors.",
-    image: "/images/sisu-extracts.jpg"
+    image: "/images/exits/sisu-extracts.png"
   }
 ];
 

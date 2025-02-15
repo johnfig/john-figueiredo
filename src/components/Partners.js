@@ -99,7 +99,7 @@ const Partners = () => {
         >
           <ImageWrapper>
             <PartnerImage 
-              src="/images/john-profile.png"
+              src="/images/team/john-profile.png"
               alt="John Figueiredo" 
             />
           </ImageWrapper>
