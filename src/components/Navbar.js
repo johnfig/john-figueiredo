@@ -24,12 +24,19 @@ const NavContainer = styled.div`
   gap: 1.5rem;
 `;
 
-const Logo = styled.h1`
+const Logo = styled(Link)`
   color: white;
   font-size: 1.25rem;
   font-weight: 500;
   letter-spacing: -0.5px;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.9;
+  
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const HamburgerButton = styled.button`
@@ -107,6 +114,21 @@ const NavLink = styled(Link)`
   opacity: 0.9;
   transition: all 0.3s ease;
   cursor: pointer;
+  position: relative;
+  padding: 0.5rem 1rem;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 215, 0, 0.8); // Golden highlight
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
   
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     font-size: 1.5rem;
@@ -114,13 +136,26 @@ const NavLink = styled(Link)`
     width: 100%;
     text-align: center;
     
+    &:hover {
+      background: rgba(255, 215, 0, 0.1); // Subtle golden background on mobile
+    }
+    
     &:active {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 215, 0, 0.2);
+    }
+    
+    &:after {
+      display: none; // Hide underline effect on mobile
     }
   }
   
   &:hover {
     opacity: 1;
+    
+    &:after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
   }
 `;
 
@@ -183,7 +218,16 @@ const Navbar = () => {
             />
           </HamburgerButton>
           
-          <Logo>SISU Ventures</Logo>
+          <Logo 
+            to="hero" 
+            smooth={true}
+            onClick={() => {
+              setIsOpen(false);
+              document.body.style.overflow = 'unset';
+            }}
+          >
+            SISU Ventures
+          </Logo>
 
           <NavLinks>
             <NavLink to="about" smooth={true}>About</NavLink>

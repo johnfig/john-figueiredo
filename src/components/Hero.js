@@ -598,7 +598,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <HeroSection>
+    <HeroSection id="hero">
       <Canvas ref={canvasRef} />
       <GradientOverlay />
       <Title

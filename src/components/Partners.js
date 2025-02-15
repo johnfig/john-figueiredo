@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
-const Section = styled.section`
+const PartnersSection = styled.section`
   padding: 120px 20px;
   background: ${props => props.theme.colors.lightBg};
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
@@ -143,7 +143,7 @@ const EmailButton = styled.a`
 
 const Partners = () => {
   return (
-    <Section id="partners">
+    <PartnersSection id="contact">
       <Container>
         <Title
           initial={{ opacity: 0, y: 20 }}
@@ -203,7 +203,7 @@ const Partners = () => {
           </PartnerInfo>
         </PartnerCard>
       </Container>
-    </Section>
+    </PartnersSection>
   );
 };
 
