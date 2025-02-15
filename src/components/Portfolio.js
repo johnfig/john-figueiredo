@@ -17,7 +17,7 @@ const Title = styled(motion.h2)`
   font-size: 3.5rem;
   margin-bottom: 4rem;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
   color: ${props => props.theme.colors.primary};
 `;
 

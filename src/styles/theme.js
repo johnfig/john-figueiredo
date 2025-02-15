@@ -12,8 +12,8 @@ const theme = {
     overlay: 'rgba(0, 0, 0, 0.7)'
   },
   fonts: {
-    heading: "'Playfair Display', serif",
-    body: "'Inter', sans-serif"
+    heading: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+    body: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
   },
   breakpoints: {
     mobile: '320px',

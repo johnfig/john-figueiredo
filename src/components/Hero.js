@@ -39,7 +39,7 @@ const GradientOverlay = styled.div`
 `;
 
 const Title = styled(motion.h1)`
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  font-family: ${props => props.theme.fonts.heading};
   font-size: 8.5rem;
   color: #fff;
   position: relative;
