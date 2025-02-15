@@ -75,7 +75,7 @@ const exits = [
   {
     id: 1,
     title: "SISU Extracts",
-    description: "Successfully exited cannabis extraction technology company through strategic acquisition, delivering exceptional returns to investors.",
+    description: "Scaled SISU to $100M+ in annual revenue with 3,000% growth over three years, expanding to 150+ employees. Led strategic partnerships, operational scaling, and M&A negotiations, culminating in an IPO as part of a $1B transaction.",
     image: "/images/exits/sisu-extracts.png"
   }
 ];

@@ -77,25 +77,25 @@ const investments = [
   {
     id: 1,
     title: "Workforce Housing",
-    description: "A diversified portfolio of workforce housing multi-family and single-family properties across the Midwest.",
+    description: "Built a diversified portfolio of 20+ workforce housing properties across the Midwest in 2024, with a plan to scale to 1,000+ properties over the next 10 years. Focused on multi-family and single-family assets, leveraging strategic acquisitions and value-add improvements to drive long-term growth and affordability.",
     image: "/images/portfolio/sisu-re-fund.png"
   },
   {
     id: 2,
     title: "Value Equities",
-    description: "Carefully selected portfolio of undervalued public equities with strong fundamentals and growth potential.",
+    description: "Built a strategic portfolio of high-cash-flow public equities with low P/E ratios, focusing on undervalued companies with strong fundamentals. Prioritized businesses with stable earnings, durable competitive advantages, and long-term growth potential to maximize returns while minimizing downside risk.",
     image: "/images/portfolio/value-equities.png"
   },
   {
     id: 3,
     title: "Plaito",
-    description: "Revolutionary AI-powered platform transforming the landscape of digital content creation and distribution.",
+    description: "Founded Plaito, an AI-powered edtech platform designed to be a next-generation tutor, unlocking human potential through personalized learning. Achieved 1.2M+ downloads and 200K+ weekly active users, leveraging AI for real-time, adaptive education.",
     image: "/images/portfolio/plaito.png"
   },
   {
     id: 4,
     title: "Mobile Home Parks",
-    description: "Strategic investments in emerging opportunities within the digital currency and blockchain ecosystem.",
+    description: "Invested in 1,100+ mobile home lots across the Midwest, executing an infill value-add strategy to maximize occupancy and cash flow. Focused on acquiring undervalued properties, improving infrastructure, and optimizing management to drive long-term appreciation and strong returns.",
     image: "/images/portfolio/odc-fund.png"
   }
 ];
