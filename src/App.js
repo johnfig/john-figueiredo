@@ -5,7 +5,6 @@ import theme from './styles/theme';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
-import Partners from './components/Partners';
 import Portfolio from './components/Portfolio';
 import Exits from './components/Exits';
 
@@ -47,7 +46,6 @@ function App() {
       <Navbar />
       <Hero />
       <About />
-      <Partners />
       <Portfolio />
       <Exits />
     </ThemeProvider>

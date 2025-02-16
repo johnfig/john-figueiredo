@@ -234,13 +234,12 @@ const Navbar = () => {
               document.body.style.overflow = 'unset';
             }}
           >
-            SISU Ventures
+            John Figueiredo
           </Logo>
 
           <NavLinks>
             <NavLink to="about" smooth={true}>About</NavLink>
             <NavLink to="portfolio" smooth={true}>Portfolio</NavLink>
-            <NavLink to="contact" smooth={true}>Contact</NavLink>
           </NavLinks>
         </NavContainer>
       </Nav>
@@ -269,13 +268,6 @@ const Navbar = () => {
           }}
         >
           <NavLink 
-            to="about" 
-            smooth={true} 
-            onClick={handleLinkClick}
-          >
-            About
-          </NavLink>
-          <NavLink 
             to="portfolio" 
             smooth={true} 
             onClick={handleLinkClick}
@@ -283,11 +275,11 @@ const Navbar = () => {
             Portfolio
           </NavLink>
           <NavLink 
-            to="contact" 
+            to="about" 
             smooth={true} 
             onClick={handleLinkClick}
           >
-            Contact
+            About
           </NavLink>
         </MobileNavContainer>
       </MobileMenu>

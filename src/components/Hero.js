@@ -746,7 +746,6 @@ const Hero = () => {
           delay: 0.2
         }}
       >
-        SISU Ventures
       </Title>
     </HeroSection>
   );
