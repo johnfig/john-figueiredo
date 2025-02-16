@@ -182,23 +182,23 @@ const About = () => {
                   <path d="M22.46 6C21.69 6.35 20.86 6.58 20 6.69C20.88 6.16 21.56 5.32 21.88 4.31C21.05 4.81 20.13 5.16 19.16 5.36C18.37 4.5 17.26 4 16 4C13.65 4 11.73 5.92 11.73 8.29C11.73 8.63 11.77 8.96 11.84 9.27C8.28 9.09 5.11 7.38 3 4.79C2.63 5.42 2.42 6.16 2.42 6.94C2.42 8.43 3.17 9.75 4.33 10.5C3.62 10.5 2.96 10.3 2.38 10V10.03C2.38 12.11 3.86 13.85 5.82 14.24C5.46 14.34 5.08 14.39 4.69 14.39C4.42 14.39 4.15 14.36 3.89 14.31C4.43 16 6 17.26 7.89 17.29C6.43 18.45 4.58 19.13 2.56 19.13C2.22 19.13 1.88 19.11 1.54 19.07C3.44 20.29 5.7 21 8.12 21C16 21 20.33 14.46 20.33 8.79C20.33 8.6 20.33 8.42 20.32 8.23C21.16 7.63 21.88 6.87 22.46 6Z"/>
                 </svg>
               </SocialButton>
-              <SocialButton href="mailto:john@sisuventures.co">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="#757575">
-                  <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z"/>
-                </svg>
-              </SocialButton>
             </SocialLinks>
           </ImageWrapper>
           <PartnerInfo>
             <PartnerName>John Figueiredo</PartnerName>
-            <PartnerRole>Founder & Managing Partner</PartnerRole>
+            <PartnerRole>Entrepreneur & Investor</PartnerRole>
             <PartnerBio>
-              John Figueiredo has an entrepreneurial background in finance and technology. 
-              He founded and scaled SISU to 100+ employees and a $100M+ revenue run rate 
-              before its acquisition in 2021 in the largest cannabis SPAC transaction in 
-              Canada. Previously, he led a global team at Teespring, driving a new revenue 
-              channel from $0 to $60M in 9 months. Now, he focuses on real estate investing, 
-              building a portfolio single and multi-family properties in the Midwest.
+              John Figueiredo is an experienced entrepreneur and investor with a proven track record 
+              in building and scaling successful companies. As the founder of SISU, he led the 
+              company's growth to over 100 employees and $100M+ in revenue before its successful 
+              acquisition in 2021. Prior to SISU, John demonstrated his ability to drive rapid 
+              growth at Teespring, where he built and led a global team that generated $60M in 
+              new revenue within just 9 months.
+              <br /><br />
+              Currently, John focuses on real estate development and investment, specializing in 
+              single and multi-family properties across the Midwest. His approach combines 
+              innovative thinking with strategic execution to create value in both traditional 
+              and emerging markets.
             </PartnerBio>
           </PartnerInfo>
         </PartnerCard>

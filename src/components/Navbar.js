@@ -268,18 +268,18 @@ const Navbar = () => {
           }}
         >
           <NavLink 
-            to="portfolio" 
-            smooth={true} 
-            onClick={handleLinkClick}
-          >
-            Portfolio
-          </NavLink>
-          <NavLink 
             to="about" 
             smooth={true} 
             onClick={handleLinkClick}
           >
             About
+          </NavLink>
+          <NavLink 
+            to="portfolio" 
+            smooth={true} 
+            onClick={handleLinkClick}
+          >
+            Portfolio
           </NavLink>
         </MobileNavContainer>
       </MobileMenu>
