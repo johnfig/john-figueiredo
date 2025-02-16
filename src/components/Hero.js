@@ -30,8 +30,8 @@ const GradientOverlay = styled.div`
   height: 100%;
   background: linear-gradient(
     180deg,
-    rgba(0, 9, 25, 0.2) 0%,
-    rgba(0, 9, 25, 0.4) 100%
+    rgba(0, 9, 25, 0) 0%,
+    rgba(0, 9, 25, 0.2) 100%
   );
 `;
 
