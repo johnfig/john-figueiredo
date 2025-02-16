@@ -543,7 +543,7 @@ const Hero = () => {
       // Calculate base position for all elements
       const totalHeight = canvas.height * 2.5;
       const scrollOffset = progress * totalHeight;
-      const baseY = canvas.height + 1800 - scrollOffset;
+      const baseY = canvas.height + 1900 - scrollOffset;
 
       // Draw "My Life Journey" title first
       const titleY = baseY - (stages.length * stageSpacing) - 100;
@@ -562,9 +562,14 @@ const Hero = () => {
         ctx.shadowOffsetX = 2;
         ctx.shadowOffsetY = 2;
         
-        // Draw text with higher opacity
+        // Draw main title
         ctx.fillStyle = `rgba(255, 255, 255, ${0.9 * fadeProgress})`;
         ctx.fillText('My Life Journey', timelineCenterX, titleY);
+        
+        // Draw SISU definition below the title
+        ctx.font = `${isMobile ? 16 : 20}px ${theme.fonts.heading}`;
+        ctx.fillStyle = `rgba(255, 215, 0, ${0.9 * fadeProgress})`; // Yellow color
+        ctx.fillText('SISU (n.) - Persevering against all odds', timelineCenterX, titleY + 40);
         
         // Reset shadow
         ctx.shadowColor = 'transparent';
@@ -574,7 +579,7 @@ const Hero = () => {
       }
 
       // Draw timeline path starting below the title
-      const timelineStartY = titleY + 40; // Add gap between title and timeline start
+      const timelineStartY = titleY + 70; // Changed from 40 to 70 to add more space
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
       ctx.lineWidth = isMobile ? 2 : 3;
       ctx.beginPath();
