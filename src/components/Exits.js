@@ -24,7 +24,8 @@ const Title = styled(motion.h2)`
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: minmax(0, 600px);
+  justify-content: center;
   gap: 2.5rem;
   
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
@@ -40,6 +41,9 @@ const ExitCard = styled(motion.div)`
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
 `;
 
 const CardImage = styled.div`
@@ -77,12 +81,6 @@ const exits = [
     title: "SISU Extracts",
     description: "Scaled SISU to $100M+ in annual revenue with 3,000% growth over three years, expanding to 150+ employees. Led strategic partnerships, operational scaling, and M&A negotiations, culminating in an IPO as part of a $1B transaction.",
     image: "/images/exits/sisu-extracts.png"
-  },
-  {
-    id: 2,
-    title: "Plaito",
-    description: "Founded Plaito, an AI-powered edtech platform designed to be a next-generation tutor, unlocking human potential through personalized learning. Achieved 1.2M+ downloads and 200K+ weekly active users, leveraging AI for real-time, adaptive education. Was in final negotiations to sell to a multi-billion dollar ed tech company but ultimately decided it was not the right fit.",
-    image: "/images/portfolio/plaito.png"
   }
 ];
 
