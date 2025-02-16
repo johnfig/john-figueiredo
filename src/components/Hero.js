@@ -223,53 +223,104 @@ const Hero = () => {
     };
 
     const drawIPOScene = (progress, x, y) => {
-      // Stock chart animation
-      const chartWidth = 200;
-      const chartHeight = 150;
+      ctx.save();
+      ctx.translate(x, y);
       
-      // Base grid
-      ctx.strokeStyle = `rgba(255, 255, 255, ${progress * 0.3})`;
-      ctx.lineWidth = 1;
+      // Stock chart background
+      const chartWidth = 100;
+      const chartHeight = 60;
+      const chartX = -chartWidth/2;
+      const chartY = -chartHeight/2;
       
-      // Grid lines
-      for (let i = 0; i <= 5; i++) {
-        const gridY = y - chartHeight/2 + (chartHeight * i/5);
-        ctx.beginPath();
-        ctx.moveTo(x - chartWidth/2, gridY);
-        ctx.lineTo(x + chartWidth/2, gridY);
-        ctx.stroke();
+      // Draw stock ticker display
+      ctx.fillStyle = `rgba(0, 20, 40, ${progress * 0.8})`;
+      ctx.fillRect(chartX, chartY - 20, chartWidth, 15);
+      
+      // Draw "SISU" ticker text
+      ctx.font = '12px Arial';
+      
+      // Price calculation with rise and crash
+      let price;
+      let priceColor;
+      if (progress < 0.4) {
+        // Initial steady at $10
+        price = 10;
+        priceColor = `rgba(0, 255, 0, ${progress})`;
+      } else if (progress < 0.6) {
+        // Rise to $13
+        const riseProgress = (progress - 0.4) / 0.2;
+        price = 10 + (riseProgress * 3);
+        priceColor = `rgba(0, 255, 0, ${progress})`;
+      } else {
+        // Crash to $2
+        const crashProgress = (progress - 0.6) / 0.4;
+        price = 13 - (crashProgress * 11);
+        priceColor = `rgba(255, 0, 0, ${progress})`;
       }
-
-      // Dramatic rising chart
-      ctx.strokeStyle = `rgba(0, 255, 255, ${progress})`;
-      ctx.lineWidth = 2;
+      
+      // Draw ticker and price
+      ctx.fillStyle = priceColor;
+      ctx.textAlign = 'left';
+      ctx.fillText('SISU', chartX + 5, chartY - 8);
+      ctx.fillText(`$${price.toFixed(2)}`, chartX + 60, chartY - 8);
+      
+      // Draw stock chart
       ctx.beginPath();
-      ctx.moveTo(x - chartWidth/2, y + chartHeight/2);
+      ctx.moveTo(chartX, chartY + chartHeight);
       
-      for (let i = 0; i <= chartWidth * progress; i += 2) {
-        const chartX = x - chartWidth/2 + i;
-        const heightMultiplier = Math.min(1, i/(chartWidth * 0.8));
-        const chartY = y + chartHeight/2 - 
-                 (Math.pow(heightMultiplier, 2) * chartHeight * 0.8 + 
-                  Math.sin(i * 0.05) * 10 * heightMultiplier);
-        ctx.lineTo(chartX, chartY);
-      }
-      ctx.stroke();
-
-      // IPO bell effect at peak
-      if (progress > 0.8) {
-        const bellProgress = (progress - 0.8) * 5;
-        const rings = 3;
-        for (let i = 0; i < rings; i++) {
-          const ringProgress = Math.max(0, Math.min(1, bellProgress - i * 0.2));
-          const radius = ringProgress * 50;
+      // Calculate Y position based on price range
+      const getYPosition = (price) => {
+        const minPrice = 2;
+        const maxPrice = 13;
+        const priceRange = maxPrice - minPrice;
+        const normalizedPrice = (price - minPrice) / priceRange;
+        return chartY + chartHeight * (1 - normalizedPrice * 0.8); // Use 80% of chart height
+      };
+      
+      for (let i = 0; i <= 20; i++) {
+        const t = i / 20;
+        const x = chartX + t * chartWidth;
+        let currentPrice;
+        
+        if (t < progress) {
+          if (t < 0.4) {
+            // Steady at $10
+            currentPrice = 10;
+          } 
+          else if (t < 0.6) {
+            // Rise to $13
+            const riseProgress = (t - 0.4) / 0.2;
+            currentPrice = 10 + (riseProgress * 3);
+          }
+          else {
+            // Crash to $2
+            const crashProgress = (t - 0.6) / 0.4;
+            currentPrice = 13 - (crashProgress * 11);
+            
+            // Add volatility during crash
+            currentPrice += Math.sin(t * 50) * 0.5 * crashProgress;
+          }
           
-          ctx.strokeStyle = `rgba(255, 215, 0, ${(1 - ringProgress) * 0.5})`;
-          ctx.beginPath();
-          ctx.arc(x, y - chartHeight/2, radius, 0, Math.PI * 2);
-          ctx.stroke();
+          const y = getYPosition(currentPrice);
+          
+          // Color transition
+          if (t < 0.6) {
+            ctx.strokeStyle = `rgba(0, 255, 0, ${progress})`;
+          } else {
+            ctx.strokeStyle = `rgba(255, 0, 0, ${progress})`;
+          }
+          ctx.lineWidth = 2;
+          
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
         }
       }
+      ctx.stroke();
+      
+      ctx.restore();
     };
 
     const drawSISUGrowthScene = (progress, x, y) => {
