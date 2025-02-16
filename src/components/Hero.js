@@ -374,38 +374,123 @@ const Hero = () => {
     };
 
     const drawCodingScene = (progress, x, y) => {
-      // Draw computer screen outline
-      const screenWidth = 150;
-      const screenHeight = 100;
+      // Monitor dimensions
+      const monitorWidth = 160;
+      const monitorHeight = 110;
+      const screenWidth = monitorWidth - 16; // Thinner bezel
+      const screenHeight = monitorHeight - 16;
       
+      // Draw monitor frame
       ctx.strokeStyle = `rgba(255, 255, 255, ${progress})`;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.rect(x - screenWidth/2, y - screenHeight/2, screenWidth, screenHeight);
-      ctx.stroke();
-
-      // Animated code lines
-      const numLines = 6;
-      const lineSpacing = screenHeight / (numLines + 1);
+      ctx.fillStyle = `rgba(50, 50, 50, ${progress * 0.8})`;
+      ctx.lineWidth = 3;
       
-      for (let i = 0; i < numLines; i++) {
-        const lineProgress = Math.max(0, Math.min(1, progress * 3 - i * 0.2));
-        const lineWidth = (Math.random() * 0.4 + 0.6) * screenWidth * 0.8;
-        const lineY = y - screenHeight/2 + lineSpacing * (i + 1);
+      // Monitor outer case with more rounded corners
+      ctx.beginPath();
+      ctx.roundRect(
+        x - monitorWidth/2,
+        y - monitorHeight/2,
+        monitorWidth,
+        monitorHeight,
+        12  // More rounded corners
+      );
+      ctx.fill();
+      ctx.stroke();
+      
+      // Draw screen background (dark)
+      ctx.fillStyle = `rgba(20, 30, 40, ${progress * 0.9})`;
+      ctx.beginPath();
+      ctx.roundRect(
+        x - screenWidth/2,
+        y - screenHeight/2,
+        screenWidth,
+        screenHeight,
+        8  // Slightly rounded screen corners
+      );
+      ctx.fill();
+      
+      // Draw stand
+      ctx.beginPath();
+      // Stand neck (thinner rectangle)
+      ctx.moveTo(x - 6, y + monitorHeight/2);
+      ctx.lineTo(x + 6, y + monitorHeight/2);
+      ctx.lineTo(x + 6, y + monitorHeight/2 + 15);
+      ctx.lineTo(x - 6, y + monitorHeight/2 + 15);
+      
+      // Stand base (curved shape)
+      ctx.moveTo(x - 25, y + monitorHeight/2 + 15);
+      ctx.quadraticCurveTo(
+        x, y + monitorHeight/2 + 18,
+        x + 25, y + monitorHeight/2 + 15
+      );
+      ctx.stroke();
+      
+      // Set up clipping region for code (ensure text stays within screen)
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(
+        x - screenWidth/2 + 10,
+        y - screenHeight/2 + 10,
+        screenWidth - 20,
+        screenHeight - 20
+      );
+      ctx.clip();
+      
+      // Draw code lines
+      const lines = [
+        'function code() {',
+        '  const dream = true;',
+        '  while (dream) {',
+        '    learn();',
+        '    build();',
+        '  }',
+        '}'
+      ];
+      
+      const lineHeight = 14;
+      const startX = x - screenWidth/2 + 15;
+      const startY = y - screenHeight/2 + 20;
+      
+      ctx.font = '12px monospace';
+      ctx.textAlign = 'left';
+      
+      lines.forEach((line, index) => {
+        const lineProgress = Math.max(0, Math.min(1, 
+          (progress * lines.length - index) * 2
+        ));
         
-        ctx.strokeStyle = `rgba(0, 255, 255, ${lineProgress * 0.8})`;
-        ctx.beginPath();
-        ctx.moveTo(x - screenWidth/2 + 10, lineY);
-        ctx.lineTo(x - screenWidth/2 + 10 + lineWidth * lineProgress, lineY);
-        ctx.stroke();
-      }
-
-      // Screen glow effect
+        if (lineProgress > 0) {
+          // Show characters one by one
+          const visibleLength = Math.floor(line.length * lineProgress);
+          const visibleText = line.substring(0, visibleLength);
+          
+          // Draw text with green color
+          ctx.fillStyle = `rgba(0, 255, 0, ${progress * 0.8})`;
+          ctx.fillText(visibleText, startX, startY + index * lineHeight);
+          
+          // Draw blinking cursor at end of current line
+          if (visibleLength < line.length && progress > index/lines.length) {
+            const cursorX = startX + ctx.measureText(visibleText).width;
+            if (Math.sin(progress * 10) > 0) {
+              ctx.fillRect(cursorX, startY + index * lineHeight - 10, 2, 12);
+            }
+          }
+        }
+      });
+      
+      ctx.restore(); // Remove clipping region
+      
+      // Add subtle screen glow
       const gradient = ctx.createRadialGradient(x, y, 0, x, y, screenWidth/2);
-      gradient.addColorStop(0, `rgba(0, 255, 255, ${progress * 0.1})`);
+      gradient.addColorStop(0, `rgba(0, 255, 0, ${progress * 0.05})`);
       gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = gradient;
-      ctx.fillRect(x - screenWidth, y - screenHeight, screenWidth * 2, screenHeight * 2);
+      ctx.fillRect(
+        x - screenWidth,
+        y - screenHeight,
+        screenWidth * 2,
+        screenHeight * 2
+      );
     };
 
     const drawLimoScene = (progress, x, y) => {
