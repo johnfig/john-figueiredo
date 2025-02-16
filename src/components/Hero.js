@@ -543,10 +543,10 @@ const Hero = () => {
       // Calculate base position for all elements
       const totalHeight = canvas.height * 2.5;
       const scrollOffset = progress * totalHeight;
-      const baseY = canvas.height + 1900 - scrollOffset;
+      const baseY = canvas.height + (isMobile ? 1600 : 1900) - scrollOffset;
 
       // Draw "My Life Journey" title first
-      const titleY = baseY - (stages.length * stageSpacing) - 100;
+      const titleY = baseY - (stages.length * stageSpacing) - (isMobile ? 50 : 100);
       if (titleY < canvas.height + 100 && titleY > -100) {
         const fadeProgress = Math.max(0, Math.min(1,
           (canvas.height - titleY + 300) / 400
