@@ -655,19 +655,19 @@ const Hero = () => {
         scene: drawFutureScene 
       },
       { 
-        text: "2023:",
+        text: "2024:",
         line1: "Real Estate Investing",
         line2: "Cash Flow to Protect Family",
         scene: drawRealEstateScene 
       },
       { 
-        text: "2022: ",
+        text: "2023: ",
         line1: "Started EdTech Startup",
         line2: "Love The Mission, Failed.",
         scene: drawEdTechScene 
       },
       { 
-        text: "2021: ",
+        text: "2021-2022: ",
         line1: "SISU $1B IPO",
         line2: "Crashed After 100+ Hour Weeks",
         scene: drawIPOScene 
