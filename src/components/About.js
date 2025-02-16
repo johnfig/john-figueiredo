@@ -164,7 +164,7 @@ const About = () => {
               src="/images/team/john-profile.png"
               alt="John Figueiredo" 
             />
-            <EmailButton href="mailto:john@sisuventures.co">
+            <EmailButton href="mailto:john@johnfigueiredo.com">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M22 6L12 13L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
