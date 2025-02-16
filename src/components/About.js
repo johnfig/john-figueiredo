@@ -145,14 +145,6 @@ const About = () => {
   return (
     <AboutSection id="about">
       <Container>
-        <Title
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          About
-        </Title>
         <PartnerCard
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -186,19 +178,18 @@ const About = () => {
           </ImageWrapper>
           <PartnerInfo>
             <PartnerName>John Figueiredo</PartnerName>
-            <PartnerRole>Entrepreneur & Investor</PartnerRole>
+            <PartnerRole>Entrepreneur, Investor, Dad</PartnerRole>
             <PartnerBio>
               John Figueiredo is an experienced entrepreneur and investor with a proven track record 
               in building and scaling successful companies. As the founder of SISU, he led the 
-              company's growth to over 100 employees and $100M+ in revenue before its successful 
+              company's profitable growth to over 150 employees and $100M+ in revenue before its successful 
               acquisition in 2021. Prior to SISU, John demonstrated his ability to drive rapid 
               growth at Teespring, where he built and led a global team that generated $60M in 
-              new revenue within just 9 months.
+              new revenue within just 9 months and $1M profit per month.
               <br /><br />
               Currently, John focuses on real estate development and investment, specializing in 
-              single and multi-family properties across the Midwest. His approach combines 
-              innovative thinking with strategic execution to create value in both traditional 
-              and emerging markets.
+              single and multi-family properties across the Midwest as well as advising entrepreneurs
+              and building new companies.
             </PartnerBio>
           </PartnerInfo>
         </PartnerCard>
