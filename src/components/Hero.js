@@ -494,47 +494,128 @@ const Hero = () => {
     };
 
     const drawLimoScene = (progress, x, y) => {
-      // Draw city street grid around current position
-      const gridSize = 30;
-      const gridWidth = 200;
-      const gridHeight = 100;
+      ctx.save();
+      ctx.translate(x, y);
       
-      ctx.strokeStyle = `rgba(255, 255, 255, ${progress * 0.3})`;
-      ctx.lineWidth = 1;
+      const bridgeRed = 'rgba(200, 40, 0, 1)';
+      ctx.fillStyle = bridgeRed;
+      ctx.strokeStyle = bridgeRed;
       
-      // Horizontal streets
-      for (let offsetY = -gridHeight/2; offsetY <= gridHeight/2; offsetY += gridSize) {
+      // Draw towers with proper Golden Gate proportions
+      const drawTower = (xPos) => {
+        ctx.lineWidth = 3;
+        
+        // Main tower structure - iconic tapered design
         ctx.beginPath();
-        ctx.moveTo(x - gridWidth/2, y + offsetY);
-        ctx.lineTo(x + gridWidth/2, y + offsetY);
+        // Left leg
+        ctx.moveTo(xPos - 20, 0);
+        ctx.lineTo(xPos - 15, -80); // Tapered top
+        // Right leg
+        ctx.moveTo(xPos + 20, 0);
+        ctx.lineTo(xPos + 15, -80); // Tapered top
         ctx.stroke();
-      }
-      
-      // Vertical streets
-      for (let offsetX = -gridWidth/2; offsetX <= gridWidth/2; offsetX += gridSize) {
+        
+        // Horizontal crossbeams - iconic Golden Gate pattern
+        [-70, -55, -40, -25].forEach(yPos => {
+          ctx.beginPath();
+          ctx.moveTo(xPos - 20, yPos);
+          ctx.lineTo(xPos + 20, yPos);
+          ctx.stroke();
+        });
+        
+        // Top arch of tower
         ctx.beginPath();
-        ctx.moveTo(x + offsetX, y - gridHeight/2);
-        ctx.lineTo(x + offsetX, y + gridHeight/2);
+        ctx.moveTo(xPos - 15, -80);
+        ctx.lineTo(xPos + 15, -80);
         ctx.stroke();
-      }
-
-      // Animated limo
-      const limoX = x + Math.cos(progress * Math.PI * 2) * 50;
-      const limoY = y + Math.sin(progress * Math.PI * 2) * 20;
+      };
       
-      ctx.strokeStyle = `rgba(255, 215, 0, ${progress})`;
+      // Draw towers
+      drawTower(-60);
+      drawTower(60);
+      
+      // Main suspension cables - iconic Golden Gate curve
       ctx.lineWidth = 2;
       
-      // Limo body
+      // Draw main cables with proper catenary curve
       ctx.beginPath();
-      ctx.rect(limoX - 20, limoY - 5, 40, 10);
+      // Left cable
+      ctx.moveTo(-100, -20);
+      ctx.lineTo(-60, -80); // Up to tower
+      // Center span with proper sag
+      ctx.bezierCurveTo(
+        -20, -75, // Control point 1
+        20, -75,  // Control point 2
+        60, -80   // To right tower
+      );
+      ctx.lineTo(100, -20); // Down to deck
       ctx.stroke();
       
-      // Wheels
+      // Vertical suspension cables - proper Golden Gate spacing
+      ctx.lineWidth = 1;
+      for (let i = -90; i <= 90; i += 6) {
+        ctx.beginPath();
+        const x = i;
+        let y;
+        
+        // Calculate cable heights based on position
+        if (x < -60) { // Left of left tower
+          const progress = (-x - 60) / 40;
+          y = -20 - (progress * 60);
+        } else if (x > 60) { // Right of right tower
+          const progress = (x - 60) / 40;
+          y = -20 - (progress * 60);
+        } else { // Between towers - proper catenary curve
+          const progress = (x + 60) / 120;
+          y = -80 + (Math.sin(progress * Math.PI) * 30);
+        }
+        
+        ctx.moveTo(x, -20); // Start at deck
+        ctx.lineTo(x, y);   // Up to main cable
+        ctx.stroke();
+      }
+      
+      // Road deck with proper thickness
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.arc(limoX - 12, limoY + 5, 3, 0, Math.PI * 2);
-      ctx.arc(limoX + 12, limoY + 5, 3, 0, Math.PI * 2);
+      ctx.moveTo(-100, -20);
+      ctx.lineTo(100, -20);
       ctx.stroke();
+      
+      // Truss pattern below deck - iconic Golden Gate pattern
+      ctx.lineWidth = 1;
+      for (let i = -95; i < 95; i += 8) {
+        ctx.beginPath();
+        ctx.moveTo(i, -20);
+        ctx.lineTo(i + 8, -15);
+        ctx.moveTo(i + 8, -20);
+        ctx.lineTo(i, -15);
+        ctx.stroke();
+      }
+      
+      // Animated white limo
+      const limoX = -80 + progress * 160;
+      
+      // Limo body
+      ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+      ctx.strokeStyle = 'rgba(100, 100, 100, 1)';
+      ctx.lineWidth = 1;
+      
+      ctx.beginPath();
+      ctx.rect(limoX - 12, -28, 24, 8);
+      ctx.fill();
+      ctx.stroke();
+      
+      ctx.fillStyle = 'rgba(50, 50, 50, 1)';
+      ctx.fillRect(limoX - 10, -27, 20, 3);
+      
+      ctx.fillStyle = 'rgba(40, 40, 40, 1)';
+      ctx.beginPath();
+      ctx.arc(limoX - 8, -20, 2, 0, Math.PI * 2);
+      ctx.arc(limoX + 8, -20, 2, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.restore();
     };
 
     const drawRunnerScene = (progress, x, y) => {
@@ -655,19 +736,19 @@ const Hero = () => {
         scene: drawFutureScene 
       },
       { 
-        text: "2023:",
+        text: "2024:",
         line1: "Real Estate Investing",
         line2: "Cash Flow to Protect Family",
         scene: drawRealEstateScene 
       },
       { 
-        text: "2022: ",
+        text: "2023: ",
         line1: "Started EdTech Startup",
         line2: "Love The Mission, Failed.",
         scene: drawEdTechScene 
       },
       { 
-        text: "2021: ",
+        text: "2021-2022: ",
         line1: "SISU $1B IPO",
         line2: "Crashed After 100+ Hour Weeks",
         scene: drawIPOScene 
