@@ -512,14 +512,54 @@ const Hero = () => {
 
     // Now define stages after all scene functions are defined
     const stages = [
-      { text: "2025+: The Next Chapter", scene: drawFutureScene },
-      { text: "2023: Real Estate Investing", scene: drawRealEstateScene },
-      { text: "2022: EdTech Startup", scene: drawEdTechScene },
-      { text: "2021: SISU IPO", scene: drawIPOScene },
-      { text: "2018-2021: Built SISU to $100M", scene: drawSISUGrowthScene },
-      { text: "2012-2018: Learned to Code", scene: drawCodingScene },
-      { text: "2011-2012: Driving a Limo", scene: drawLimoScene },
-      { text: "2000-2010: Nationally Ranked Runner", scene: drawRunnerScene }
+      { 
+        text: "2025+: ",
+        line1: "The Next Chapter",
+        line2: "I'll grow until I die",
+        scene: drawFutureScene 
+      },
+      { 
+        text: "2023:",
+        line1: "Real Estate Investing",
+        line2: "Cash Flow to Protect Family",
+        scene: drawRealEstateScene 
+      },
+      { 
+        text: "2022: ",
+        line1: "Started EdTech Startup",
+        line2: "Love The Mission, Failed.",
+        scene: drawEdTechScene 
+      },
+      { 
+        text: "2021: ",
+        line1: "SISU $1B IPO",
+        line2: "Crashed After 100+ Hour Weeks",
+        scene: drawIPOScene 
+      },
+      { 
+        text: "2018-2021:",
+        line1: "Started First Company",
+        line2: "Built SISU to $100M",
+        scene: drawSISUGrowthScene 
+      },
+      { 
+        text: "2012-2018:",
+        line1: "Taught Myself to Code",
+        line2: "Lived the SF Dream",
+        scene: drawCodingScene 
+      },
+      { 
+        text: "2011-2012: ",
+        line1: "Moved to SF",
+        line2: "Drove Limo, Slept in Car",
+        scene: drawLimoScene 
+      },
+      { 
+        text: "2000-2010:",
+        line1: "Nationally Ranked Runner",
+        line2: "Got Injured & Lost Olympic Dream",
+        scene: drawRunnerScene 
+      }
     ];
 
     const drawTimeline = (time) => {
@@ -643,27 +683,27 @@ const Hero = () => {
           // Draw stage text with fade
           ctx.textAlign = 'center';
 
+          // Calculate text position with proper spacing
+          const dateY = stageY - (isMobile ? 105 : 140);
+          const line1Y = stageY - (isMobile ? 85 : 115);
+          const line2Y = stageY - (isMobile ? 65 : 95);
+
           // Split text into date and title
           const [date, ...titleParts] = stage.text.split(': ');
           const title = titleParts.join(': ');
 
-          // Calculate text position with proper spacing
-          const dateY = stageY - (isMobile ? 85 : 120);
-          const titleY = stageY - (isMobile ? 65 : 95);
-
           // Adjust font sizes
           ctx.font = `${fontSize}px Arial`; // Date font
           const dateWidth = ctx.measureText(date).width;
-
-          ctx.font = `bold ${fontSize}px Arial`; // Title font
-          const titleWidth = ctx.measureText(title).width;
+          const line1Width = ctx.measureText(stage.line1).width;
+          const line2Width = ctx.measureText(stage.line2).width;
 
           // Calculate maximum width for background
-          const maxWidth = Math.max(dateWidth, titleWidth);
+          const maxWidth = Math.max(dateWidth, line1Width, line2Width);
           const padding = isMobile ? 10 : 20;
-          const bgHeight = isMobile ? 45 : 55;
+          const bgHeight = isMobile ? 65 : 75; // Increased from 65/75 to 85/95 to match new spacing
 
-          // Calculate text position with half-screen centering for mobile
+          // Calculate text position
           const textX = isMobile ? 
             (isLeft ? canvas.width * 0.25 : canvas.width * 0.75) : // Center in each half on mobile
             sceneX; // Desktop positioning
@@ -683,10 +723,14 @@ const Hero = () => {
           ctx.fillStyle = `rgba(255, 255, 255, ${0.7 * stageProgress * fadeProgress})`;
           ctx.fillText(date, textX, dateY);
 
-          // Draw title
-          ctx.font = `bold ${fontSize}px Arial`;
+          // Draw line1
+          ctx.font = `${fontSize - 2}px Arial`;
           ctx.fillStyle = `rgba(255, 255, 255, ${stageProgress * fadeProgress})`;
-          ctx.fillText(title, textX, titleY);
+          ctx.fillText(stage.line1, textX, line1Y);
+
+          // Draw line2
+          ctx.fillStyle = `rgba(255, 255, 255, ${stageProgress * fadeProgress * 0.8})`; // Slightly more transparent
+          ctx.fillText(stage.line2, textX, line2Y);
         }
       });
 
