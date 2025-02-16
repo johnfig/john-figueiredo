@@ -88,15 +88,15 @@ const investments = [
   },
   {
     id: 3,
-    title: "Stealth Startup",
-    description: "Stay tuned...",
-    image: "/images/portfolio/stealth-ai.png"
-  },
-  {
-    id: 4,
     title: "Mobile Home Parks",
     description: "Invested in 1,100+ mobile home lots across the Midwest, executing an infill value-add strategy to maximize occupancy and cash flow. Focused on acquiring undervalued properties, improving infrastructure, and optimizing management to drive long-term appreciation and strong returns.",
     image: "/images/portfolio/odc-fund.png"
+  },
+  {
+    id: 4,
+    title: "Stealth Startup",
+    description: "Stay tuned...",
+    image: "/images/portfolio/stealth-ai.png"
   }
 ];
 
